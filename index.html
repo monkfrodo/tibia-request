@@ -5,167 +5,172 @@
 <title>Tibia Access Tool</title>
 
 <style>
+  /* BACKGROUND */
   body {
     margin: 0;
     padding: 0;
-    background: #f3f3f3;
-    font-family: "Verdana", sans-serif;
-    color: #2a2a2a;
+    background: #1a1a1a;
+    color: #eaeaea;
+    font-family: "Inter", "Verdana", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
   }
 
-  .container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 0 20px;
-  }
-
-  /* TITULOS */
-  h1 {
-    font-size: 32px;
-    font-weight: 700;
-    color: #1c3f7a;
-    margin-bottom: 5px;
-  }
-
-  h2 {
-    font-size: 18px;
-    font-weight: 400;
-    color: #4c4c4c;
-    margin-bottom: 25px;
-  }
-
-  /* CARD DO BAZAAR */
+  /* CARD CENTRAL */
   .card {
-    background: white;
-    padding: 25px 28px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.10);
-    margin-bottom: 28px;
+    background: #2a2a2a;
+    width: 420px;
+    padding: 40px 36px;
+    border-radius: 14px;
+    margin-top: 60px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+    position: relative;
   }
 
-  .card-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #1c3f7a;
+  .sprite {
+    display: flex;
+    justify-content: center;
     margin-bottom: 18px;
   }
 
-  label {
-    font-size: 14px;
+  .sprite img {
+    width: 54px;
+    opacity: 0.95;
+    image-rendering: pixelated;
+  }
+
+  .title {
+    text-align: center;
+    font-size: 24px;
     font-weight: 600;
-    color: #1c3f7a;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #bcbcbc;
+    margin-bottom: 28px;
+  }
+
+  label {
     display: block;
-    margin-bottom: 4px;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #e1e1e1;
+    margin-top: 16px;
   }
 
   input, textarea {
     width: 100%;
     padding: 12px;
+    background: #1f1f1f;
+    border: 1px solid #3a3a3a;
     border-radius: 6px;
-    border: 1px solid #cfcfcf;
-    background: #fdfdfd;
-    margin-bottom: 16px;
     font-size: 14px;
+    color: #f2f2f2;
+    margin-bottom: 12px;
+    transition: 0.2s;
   }
 
   input:focus, textarea:focus {
+    border-color: #4f8cff;
+    box-shadow: 0 0 0 2px rgba(79,140,255,0.4);
     outline: none;
-    border: 1px solid #1c3f7a;
-    box-shadow: 0 0 0 2px rgba(28,63,122,0.15);
   }
 
   textarea {
     resize: vertical;
-    min-height: 90px;
+    min-height: 80px;
   }
 
-  /* BOTÃO AZUL CIPSOFT */
+  /* BOTÕES */
   .btn-blue {
-    background: #1c3f7a;
-    color: white;
-    padding: 12px 22px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #4f8cff;
     border: none;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
+    color: white;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.15s;
   }
 
   .btn-blue:hover {
-    background: #274f96;
+    background: #6da2ff;
   }
 
-  /* BOTÃO AMARELO BAZAAR */
   .btn-yellow {
-    background: #f3b22f;
-    color: #4a2c00;
-    padding: 12px 22px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    background: #f1b42c;
     border: none;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
+    color: #3b2a00;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.15s;
   }
 
   .btn-yellow:hover {
-    background: #ffca4a;
+    background: #ffcc47;
   }
 
   /* INFO DO CHAR */
   #char-info {
-    background: #f8faff;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #d7e4ff;
-    margin-top: 12px;
     display: none;
+    background: #232323;
+    border: 1px solid #3f3f3f;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 10px;
     font-size: 14px;
   }
 
-  #message {
-    font-weight: 700;
-    margin-top: 10px;
+  .message {
     text-align: center;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: 600;
   }
 
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="card">
 
-  <h1>Tibia Access Tool</h1>
-  <h2>Organize acessos de quests e bosses com clareza e praticidade.</h2>
-
-  <!-- CARD 1 -->
-  <div class="card">
-
-    <div class="card-title">Validar personagem</div>
-
-    <label>Nome do personagem</label>
-    <input id="charName" placeholder="Ex: Kevin Eger">
-
-    <button class="btn-blue" onclick="validateChar()">Validar personagem</button>
-
-    <div id="char-info"></div>
-    <div id="message"></div>
+  <div class="sprite">
+    <img src="https://static.tibia.com/images/global/items/key.gif" alt="key">
   </div>
 
-  <!-- CARD 2 -->
-  <div class="card" id="cardAccess" style="display:none;">
-    <div class="card-title">Acesso desejado</div>
+  <div class="title">Tibia Access Tool</div>
+  <div class="subtitle">Gerencie seus acessos com simplicidade e estilo.</div>
 
-    <label>Quest / Boss</label>
+  <label>Nome do personagem</label>
+  <input id="charName" placeholder="Ex: Kevin Eger">
+
+  <button class="btn-blue" onclick="validateChar()">Validar personagem</button>
+
+  <div id="char-info"></div>
+  <div id="message" class="message"></div>
+
+  <div id="step2" style="display:none; margin-top:20px;">
+    <label>Quest / Boss desejado</label>
     <input id="requestedAccess" placeholder="Ex: Roshamuul, Falcon, Warzone...">
 
-    <label>Notas adicionais (opcional)</label>
+    <label>Notas adicionais</label>
     <textarea id="notes" placeholder="Horários, progressão, observações..."></textarea>
 
     <button class="btn-yellow" onclick="submitForm()">Enviar acesso</button>
-
-    <div id="message2"></div>
+    <div id="message2" class="message"></div>
   </div>
 
 </div>
@@ -178,21 +183,23 @@ async function validateChar() {
   const name = document.getElementById("charName").value.trim();
   const msg = document.getElementById("message");
   const info = document.getElementById("char-info");
-  const cardAccess = document.getElementById("cardAccess");
+  const step2 = document.getElementById("step2");
 
   msg.innerHTML = "";
   info.style.display = "none";
-  cardAccess.style.display = "none";
+  step2.style.display = "none";
 
   if (!name) {
     msg.innerHTML = "Digite o nome do personagem.";
     return;
   }
 
-  msg.innerHTML = "Validando personagem...";
+  msg.innerHTML = "Validando...";
 
   try {
-    const data = await fetch(`https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`);
+    const data = await fetch(
+      `https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`
+    );
     const json = await data.json();
 
     if (!json.character || !json.character.character) {
@@ -210,7 +217,7 @@ async function validateChar() {
     `;
 
     msg.innerHTML = "";
-    cardAccess.style.display = "block";
+    step2.style.display = "block";
 
   } catch {
     msg.innerHTML = "Erro ao validar personagem.";
@@ -244,10 +251,13 @@ async function submitForm() {
   };
 
   try {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec", {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec",
+      {
+        method: "POST",
+        body: JSON.stringify(payload)
+      }
+    );
 
     const out = await res.json();
 
