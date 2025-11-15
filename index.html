@@ -1,92 +1,190 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Tibia Quest Access</title>
+<title>Tibia Access Tool</title>
 
 <style>
+  /* ====== BASE GERAL ====== */
+  * {
+    box-sizing: border-box;
+  }
+
   body {
-    font-family: Tahoma, sans-serif;
-    background: url('https://static.tibia.com/images/global/background/bg_blue.jpg');
-    background-size: cover;
-    color: #e5e5e5;
+    font-family: Tahoma, Verdana, sans-serif;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    color: #1b1306;
+    background:
+      radial-gradient(circle at top, rgba(255,255,255,0.1) 0, transparent 60%),
+      #020617 url("https://static.tibia.com/images/global/background/bg_blue.jpg") center top no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
   }
 
-  .container {
+  /* ====== TOPO (HEADER) ====== */
+  .top-bar {
+    width: 100%;
+    padding: 10px 16px;
+    background: linear-gradient(to bottom, #2b0000, #5c0000, #320000);
+    border-bottom: 3px solid #c79b3b;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+  }
+
+  .top-inner {
+    width: 100%;
+    max-width: 960px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #f5e6c8;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffe28a 0, #d19b2a 40%, #4b2900 100%);
+    border: 2px solid #f5d77a;
+    box-shadow: 0 0 8px rgba(0,0,0,0.7);
+  }
+
+  .logo-text-main {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #ffe69a;
+    text-shadow: 2px 2px 0 #2b0e00;
+  }
+
+  .logo-text-sub {
+    font-size: 11px;
+    color: #f0e5c5;
+    opacity: 0.8;
+  }
+
+  .top-status {
+    font-size: 11px;
+    color: #ffe7ae;
+    opacity: 0.9;
+  }
+
+  /* ====== CONTEÚDO CENTRAL ====== */
+  .page {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px 40px;
+  }
+
+  .card {
+    width: 100%;
     max-width: 520px;
-    margin: 60px auto;
-    background: rgba(0, 0, 0, 0.75);
-    padding: 25px;
+    background: #e2cba1 url("https://static.tibia.com/images/global/content/scroll.gif");
+    background-size: cover;
     border-radius: 10px;
-    border: 3px solid #b99332;
-    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    border: 3px solid #b78a34;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+    padding: 22px 20px 26px;
   }
 
-  h1 {
-    font-size: 28px;
-    text-align: center;
-    color: #ffd76a;
-    text-shadow: 2px 2px 4px #000;
+  .card-header {
+    border-bottom: 2px solid #c29b4b;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
   }
 
-  h2 {
-    font-size: 18px;
-    text-align: center;
-    color: #fff;
-    margin-top: -10px;
-    font-weight: normal;
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #4b2800;
+  }
+
+  .card-subtitle {
+    font-size: 13px;
+    color: #6b3e06;
+    margin-top: 4px;
+  }
+
+  .info-box {
+    font-size: 12px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 6px;
+    border: 1px solid #d6b167;
+    padding: 8px 10px;
+    margin-bottom: 10px;
   }
 
   label {
-    margin-top: 15px;
     display: block;
-    font-size: 15px;
-    color: #ffd76a;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4b2800;
   }
 
-  input, select, textarea {
+  input, textarea {
     width: 100%;
-    padding: 10px;
-    margin-top: 6px;
+    padding: 9px 10px;
+    margin-top: 5px;
     border-radius: 6px;
-    border: 1px solid #463200;
-    background: #1b1b1b;
-    color: #fff;
-    font-size: 15px;
+    border: 1px solid #c19d6a;
+    background: #f9f0dd;
+    color: #2b1600;
+    font-size: 14px;
   }
 
   textarea {
-    height: 80px;
     resize: vertical;
+    min-height: 80px;
   }
 
-  button {
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #b8791c;
+    box-shadow: 0 0 0 1px rgba(184,121,28,0.4);
+  }
+
+  .btn {
     width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    background: #b99332;
-    border: none;
+    margin-top: 18px;
+    padding: 10px 12px;
     border-radius: 6px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #000;
+    border: 2px solid #f4d57c;
+    background: linear-gradient(to bottom, #ffd568, #c68b22);
+    color: #271200;
+    font-weight: 700;
+    font-size: 15px;
     cursor: pointer;
-    border: 2px solid #e5c068;
-    text-shadow: 1px 1px 0px #fff;
+    text-shadow: 1px 1px 0 #ffeec0;
   }
 
-  button:hover {
-    filter: brightness(1.15);
+  .btn:hover {
+    filter: brightness(1.07);
+  }
+
+  .btn-secondary {
+    margin-top: 10px;
+    background: linear-gradient(to bottom, #d1b78a, #aa8247);
   }
 
   #char-info {
-    margin-top: 15px;
-    padding: 12px;
-    background: #111;
-    border: 1px solid #333;
+    margin-top: 12px;
+    padding: 10px 11px;
     border-radius: 6px;
+    border: 1px solid #c09b52;
+    background: rgba(255,255,255,0.8);
+    font-size: 13px;
     display: none;
   }
 
@@ -95,52 +193,118 @@
   }
 
   #message {
-    margin-top: 15px;
+    margin-top: 12px;
     text-align: center;
-    font-size: 15px;
-    color: #ffd76a;
+    font-size: 13px;
+    font-weight: 600;
+    color: #7b3b08;
+  }
+
+  /* ====== FOOTER ====== */
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: #e5e7eb;
+    padding-bottom: 10px;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 600px) {
+    .card {
+      padding: 18px 14px 22px;
+    }
+
+    .logo-text-main {
+      font-size: 18px;
+    }
+
+    .top-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
   }
 </style>
-
 </head>
+
 <body>
 
-<div class="container">
-
-  <h1>Tibia Access Tool</h1>
-  <h2>Organize seus acessos de quests e bosses</h2>
-
-  <!-- STEP 1: VALIDAR CHAR -->
-  <label>Nome do Personagem *</label>
-  <input id="charName" placeholder="Ex: Hecks Leads">
-  <button onclick="validateChar()">Validar Personagem</button>
-
-  <div id="char-info"></div>
-
-  <!-- STEP 2: APÓS VALIDAR -->
-  <div id="step2">
-    <label>Quest / Boss *</label>
-    <input id="requestedAccess" placeholder="Ex: Roshamuul, Falcon, Warzone...">
+  <!-- TOPO -->
+  <div class="top-bar">
+    <div class="top-inner">
+      <div class="logo">
+        <div class="logo-mark"></div>
+        <div>
+          <div class="logo-text-main">Tibia Access Tool</div>
+          <div class="logo-text-sub">Organizador de quests & bosses</div>
+        </div>
+      </div>
+      <div class="top-status">
+        Powered by Google Sheets • TibiaData API
+      </div>
+    </div>
   </div>
 
-  <!-- STEP 3: NOTAS + ENVIAR -->
-  <div id="step3">
-    <label>Notas (opcional)</label>
-    <textarea id="notes" placeholder="Horários disponíveis, time, world transfer, etc."></textarea>
+  <!-- CONTEÚDO -->
+  <div class="page">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Pedido de Acesso</div>
+        <div class="card-subtitle">
+          Registre aqui quais quests ou bosses você precisa de acesso. Primeiro validamos seu personagem, depois você informa o que está buscando.
+        </div>
+      </div>
 
-    <button onclick="submitForm()">Enviar Pedido</button>
-    <p id="message"></p>
+      <div class="info-box">
+        1) Digite o nome do personagem e clique em <b>Validar</b>.<br>
+        2) Confirme level e vocação.<br>
+        3) Informe a quest/boss desejada e, se quiser, detalhes de horário ou time.
+      </div>
+
+      <!-- STEP 1: VALIDAR CHAR -->
+      <label>Nome do personagem *</label>
+      <input id="charName" placeholder="Ex: Kevin Eger">
+      <button class="btn" onclick="validateChar()">Validar personagem</button>
+
+      <div id="char-info"></div>
+
+      <!-- STEP 2: QUEST/BOSS -->
+      <div id="step2">
+        <label>Quest / Boss desejado *</label>
+        <input id="requestedAccess" placeholder="Ex: Roshamuul, Falcon, Warzone, Ferumbras, etc.">
+      </div>
+
+      <!-- STEP 3: NOTAS + ENVIAR -->
+      <div id="step3">
+        <label>Notas (opcional)</label>
+        <textarea id="notes" placeholder="Horários disponíveis, world, se já tem parte do acesso, etc."></textarea>
+
+        <button class="btn btn-secondary" onclick="submitForm()">Enviar pedido</button>
+        <div id="message"></div>
+      </div>
+    </div>
   </div>
 
-</div>
-
+  <div class="footer">
+    Fan tool não-oficial para organização de acessos. Tibia é uma marca registrada da CipSoft GmbH.
+  </div>
 
 <script>
+let charData = null;
 
+/* STEP 1: VALIDAR CHAR NA TIBIADATA */
 async function validateChar() {
-  let name = document.getElementById("charName").value.trim();
-  let message = document.getElementById("message");
-  let infoBox = document.getElementById("char-info");
+  const nameInput = document.getElementById("charName");
+  const name = nameInput.value.trim();
+  const message = document.getElementById("message");
+  const infoBox = document.getElementById("char-info");
+
+  message.innerHTML = "";
+  infoBox.style.display = "none";
+  infoBox.innerHTML = "";
+  charData = null;
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("step3").style.display = "none";
 
   if (!name) {
     message.innerHTML = "Digite o nome do personagem.";
@@ -149,72 +313,87 @@ async function validateChar() {
 
   message.innerHTML = "Validando personagem...";
 
-  let url = `https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`;
-  let r = await fetch(url);
-  let json = await r.json();
+  try {
+    const url = `https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`;
+    const r = await fetch(url);
+    const json = await r.json();
 
-  if (!json.character || !json.character.character) {
-    message.innerHTML = "Personagem não encontrado.";
+    if (!json.character || !json.character.character) {
+      message.innerHTML = "Personagem não encontrado.";
+      return;
+    }
+
+    const c = json.character.character;
+    charData = c;
+
+    infoBox.style.display = "block";
+    infoBox.innerHTML = `
+      <b>Nome:</b> ${c.name}<br>
+      <b>Level:</b> ${c.level}<br>
+      <b>Vocação:</b> ${c.vocation}
+    `;
+
+    message.innerHTML = "";
+
+    // libera próximos passos
+    document.getElementById("step2").style.display = "block";
+    document.getElementById("step3").style.display = "block";
+
+  } catch (err) {
+    console.error(err);
+    message.innerHTML = "Erro ao consultar TibiaData. Tente novamente em alguns instantes.";
+  }
+}
+
+/* STEP 2 + 3: ENVIAR PARA O APPS SCRIPT */
+async function submitForm() {
+  const message = document.getElementById("message");
+
+  if (!charData) {
+    message.innerHTML = "Valide o personagem antes de enviar o pedido.";
     return;
   }
 
-  let c = json.character.character;
+  const requestedAccess = document.getElementById("requestedAccess").value.trim();
+  const notes = document.getElementById("notes").value.trim();
 
-  infoBox.style.display = "block";
-  infoBox.innerHTML = `
-    <b>Nome:</b> ${c.name}<br>
-    <b>Level:</b> ${c.level}<br>
-    <b>Vocação:</b> ${c.vocation}
-  `;
-
-  message.innerHTML = "";
-
-  // liberar próximo passo
-  window.charData = c;
-  document.getElementById("step2").style.display = "block";
-  document.getElementById("step3").style.display = "block";
-}
-
-
-async function submitForm() {
-  let c = window.charData;
-  let req = document.getElementById("requestedAccess").value.trim();
-  let notes = document.getElementById("notes").value.trim();
-  let message = document.getElementById("message");
-
-  if (!req) {
-    message.innerHTML = "Digite a quest/boss.";
+  if (!requestedAccess) {
+    message.innerHTML = "Informe a quest ou o boss desejado.";
     return;
   }
 
   const payload = {
-    charName: c.name,
-    level: c.level,
-    vocation: c.vocation,
-    requestedAccess: req,
+    charName: charData.name,
+    level: charData.level,
+    vocation: charData.vocation,
+    requestedAccess: requestedAccess,
     notes: notes
   };
 
   const backendUrl = "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec";
 
-  message.innerHTML = "Enviando...";
+  message.innerHTML = "Enviando pedido...";
 
-  let res = await fetch(backendUrl, {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(backendUrl, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
 
-  let final = await res.json();
+    const final = await res.json();
 
-  if (final.success) {
-    message.innerHTML = "Pedido registrado com sucesso!";
-    document.getElementById("requestedAccess").value = "";
-    document.getElementById("notes").value = "";
-  } else {
-    message.innerHTML = "Erro ao salvar. Tente novamente.";
+    if (final.success) {
+      message.innerHTML = "Pedido registrado com sucesso!";
+      document.getElementById("requestedAccess").value = "";
+      document.getElementById("notes").value = "";
+    } else {
+      message.innerHTML = "Erro ao salvar. Tente novamente.";
+    }
+  } catch (err) {
+    console.error(err);
+    message.innerHTML = "Erro de comunicação com o servidor. Tente novamente.";
   }
 }
-
 </script>
 
 </body>
