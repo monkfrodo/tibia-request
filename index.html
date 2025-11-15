@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tibia Access Request</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #0b1220;
+    color: #fff;
+    padding: 0;
+    margin: 0;
+  }
+
+  .container {
+    max-width: 420px;
+    margin: 50px auto;
+    background: #111827;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #1f2937;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  }
+
+  h2 {
+    text-align: center;
+    margin-top: 0;
+    font-weight: 600;
+  }
+
+  label {
+    font-size: 14px;
+    margin-top: 15px;
+    display: block;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: #fff;
+    font-size: 15px;
+  }
+
+  textarea {
+    height: 80px;
+    resize: vertical;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #3b82f6;
+    border: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  button:hover {
+    filter: brightness(1.1);
+  }
+
+  #message {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 15px;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <h2>Request Access</h2>
+
+  <label>Character Name *</label>
+  <input id="charName" placeholder="Ex: Hecks Leads">
+
+  <label>Quest / Boss *</label>
+  <input id="requestedAccess" placeholder="Ex: Roshamuul, Falcon, Warzone...">
+
+  <label>Notes (optional)</label>
+  <textarea id="notes" placeholder="Horários disponíveis, time, world transfer, etc."></textarea>
+
+  <button onclick="submitForm()">Enviar Pedido</button>
+
+  <p id="message"></p>
+</div>
+
+<script>
+async function submitForm() {
+  let name = document.getElementById("charName").value.trim();
+  let req = document.getElementById("requestedAccess").value.trim();
+  let notes = document.getElementById("notes").value.trim();
+  let message = document.getElementById("message");
+
+  message.innerHTML = "";
+
+  if (!name || !req) {
+    message.innerHTML = "Preencha o nome do char e a quest/boss.";
+    return;
+  }
+
+  message.innerHTML = "Consultando personagem...";
+
+  // 1. Buscar level + vocação na TibiaData
+  let url = `https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`;
+
+  let r = await fetch(url);
+  let json = await r.json();
+
+  if (!json.character || !json.character.character) {
+    message.innerHTML = "Personagem não encontrado.";
+    return;
+  }
+
+  let c = json.character.character;
+  let payload = {
+    charName: c.name,
+    level: c.level,
+    vocation: c.vocation,
+    requestedAccess: req,
+    notes: notes
+  };
+
+  message.innerHTML = "Enviando para o Banco de Dados...";
+
+  // 2. Enviar para o Apps Script
+  let backendUrl = "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec";
+
+  let res = await fetch(backendUrl, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+
+  let final = await res.json();
+
+  if (final.success) {
+    message.innerHTML = "Pedido registrado com sucesso!";
+    document.getElementById("charName").value = "";
+    document.getElementById("requestedAccess").value = "";
+    document.getElementById("notes").value = "";
+  } else {
+    message.innerHTML = "Erro ao salvar. Tente novamente.";
+  }
+}
+</script>
+
+</body>
+</html>
