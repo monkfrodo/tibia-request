@@ -8,160 +8,166 @@
   body {
     margin: 0;
     padding: 0;
-    font-family: Tahoma, Verdana, sans-serif;
-    background: #000016 url("https://static.tibia.com/images/global/background/bg_blue.jpg") no-repeat center top;
-    background-size: cover;
-    color: #2b1a04;
+    background: #f3f3f3;
+    font-family: "Verdana", sans-serif;
+    color: #2a2a2a;
   }
 
-  /* Container central */
-  .main-wrapper {
-    max-width: 740px;
-    margin: 60px auto;
-    border: 3px solid #4a2d10;
-    border-radius: 6px;
-    box-shadow: 0 0 14px rgba(0,0,0,0.9);
-    overflow: hidden;
+  .container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 0 20px;
   }
 
-  /* Header estilo Tibia */
-  .header {
-    background: linear-gradient(to bottom, #6d0f0f, #410505);
-    padding: 10px 14px;
-    border-bottom: 2px solid #1d0c05;
-    font-size: 15px;
-    font-weight: bold;
-    color: #ffe7aa;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  /* TITULOS */
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1c3f7a;
+    margin-bottom: 5px;
   }
 
-  /* Corpo estilo pergaminho */
-  .content {
-    background: #e7d2a8 url("https://static.tibia.com/images/global/content/scroll.gif");
-    padding: 20px 22px 30px;
-    font-size: 14px;
-  }
-
-  .subtitle {
+  h2 {
     font-size: 18px;
-    margin-bottom: 6px;
-    color: #4a2603;
-    font-weight: bold;
+    font-weight: 400;
+    color: #4c4c4c;
+    margin-bottom: 25px;
   }
 
-  .info {
-    background: rgba(255,255,255,0.7);
-    padding: 10px 12px;
-    border-radius: 6px;
-    border: 1px solid #d2b273;
-    margin-bottom: 14px;
-    font-size: 13px;
+  /* CARD DO BAZAAR */
+  .card {
+    background: white;
+    padding: 25px 28px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+    margin-bottom: 28px;
+  }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1c3f7a;
+    margin-bottom: 18px;
   }
 
   label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1c3f7a;
     display: block;
-    margin-top: 16px;
-    font-weight: bold;
-    color: #4a2603;
+    margin-bottom: 4px;
   }
 
   input, textarea {
     width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    border-radius: 4px;
-    border: 1px solid #c19b63;
-    background: #f8f0db;
-    font-size: 13px;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #cfcfcf;
+    background: #fdfdfd;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border: 1px solid #1c3f7a;
+    box-shadow: 0 0 0 2px rgba(28,63,122,0.15);
   }
 
   textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 90px;
   }
 
-  .btn {
-    display: inline-block;
-    margin-top: 18px;
-    padding: 9px 14px;
-    background: linear-gradient(to bottom, #ffd56c, #b67b1a);
-    border: 2px solid #f3dc8b;
-    color: #251300;
-    font-weight: bold;
-    border-radius: 4px;
+  /* BOTÃO AZUL CIPSOFT */
+  .btn-blue {
+    background: #1c3f7a;
+    color: white;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 13px;
-    text-shadow: 1px 1px 0 #ffeeb0;
+    transition: 0.2s;
   }
 
-  .btn:hover {
-    filter: brightness(1.08);
+  .btn-blue:hover {
+    background: #274f96;
   }
 
+  /* BOTÃO AMARELO BAZAAR */
+  .btn-yellow {
+    background: #f3b22f;
+    color: #4a2c00;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .btn-yellow:hover {
+    background: #ffca4a;
+  }
+
+  /* INFO DO CHAR */
   #char-info {
+    background: #f8faff;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #d7e4ff;
+    margin-top: 12px;
     display: none;
-    background: rgba(255,255,255,0.85);
-    border: 1px solid #c19b63;
-    padding: 10px;
-    border-radius: 4px;
-    margin-top: 10px;
-    font-size: 13px;
-  }
-
-  #step2, #step3 {
-    display: none;
+    font-size: 14px;
   }
 
   #message {
-    margin-top: 12px;
-    font-weight: bold;
+    font-weight: 700;
+    margin-top: 10px;
     text-align: center;
-    color: #6e3a07;
   }
 
 </style>
 </head>
 <body>
 
-<div class="main-wrapper">
+<div class="container">
 
-  <div class="header">Quest & Boss Access</div>
+  <h1>Tibia Access Tool</h1>
+  <h2>Organize acessos de quests e bosses com clareza e praticidade.</h2>
 
-  <div class="content">
+  <!-- CARD 1 -->
+  <div class="card">
 
-    <div class="subtitle">Organize seus acessos no estilo Tibia</div>
+    <div class="card-title">Validar personagem</div>
 
-    <div class="info">
-      1) Digite o nome do personagem Tibia.<br>
-      2) Validamos level e vocação automaticamente.<br>
-      3) Escolha o acesso desejado e envie.
-    </div>
-
-    <!-- STEP 1 -->
-    <label>Nome do personagem *</label>
+    <label>Nome do personagem</label>
     <input id="charName" placeholder="Ex: Kevin Eger">
 
-    <button class="btn" onclick="validateChar()">Validar personagem</button>
+    <button class="btn-blue" onclick="validateChar()">Validar personagem</button>
 
     <div id="char-info"></div>
-
-    <!-- STEP 2 -->
-    <div id="step2">
-      <label>Quest / Boss *</label>
-      <input id="requestedAccess" placeholder="Ex: Roshamuul, Falcon, Warzone...">
-    </div>
-
-    <!-- STEP 3 -->
-    <div id="step3">
-      <label>Notas (opcional)</label>
-      <textarea id="notes" placeholder="Horários disponíveis, progressos, etc."></textarea>
-
-      <button class="btn" onclick="submitForm()">Enviar</button>
-      <div id="message"></div>
-    </div>
-
+    <div id="message"></div>
   </div>
+
+  <!-- CARD 2 -->
+  <div class="card" id="cardAccess" style="display:none;">
+    <div class="card-title">Acesso desejado</div>
+
+    <label>Quest / Boss</label>
+    <input id="requestedAccess" placeholder="Ex: Roshamuul, Falcon, Warzone...">
+
+    <label>Notas adicionais (opcional)</label>
+    <textarea id="notes" placeholder="Horários, progressão, observações..."></textarea>
+
+    <button class="btn-yellow" onclick="submitForm()">Enviar acesso</button>
+
+    <div id="message2"></div>
+  </div>
+
 </div>
 
 <script>
@@ -172,13 +178,11 @@ async function validateChar() {
   const name = document.getElementById("charName").value.trim();
   const msg = document.getElementById("message");
   const info = document.getElementById("char-info");
+  const cardAccess = document.getElementById("cardAccess");
 
   msg.innerHTML = "";
   info.style.display = "none";
-  charData = null;
-
-  document.getElementById("step2").style.display = "none";
-  document.getElementById("step3").style.display = "none";
+  cardAccess.style.display = "none";
 
   if (!name) {
     msg.innerHTML = "Digite o nome do personagem.";
@@ -201,43 +205,41 @@ async function validateChar() {
 
     info.style.display = "block";
     info.innerHTML = `
-      <b>Nome:</b> ${c.name}<br>
-      <b>Level:</b> ${c.level}<br>
-      <b>Vocação:</b> ${c.vocation}
+      <b>${c.name}</b><br>
+      Level ${c.level} • ${c.vocation}
     `;
 
     msg.innerHTML = "";
-    document.getElementById("step2").style.display = "block";
-    document.getElementById("step3").style.display = "block";
+    cardAccess.style.display = "block";
 
-  } catch (e) {
-    msg.innerHTML = "Erro ao validar. Tente novamente.";
+  } catch {
+    msg.innerHTML = "Erro ao validar personagem.";
   }
 }
 
 async function submitForm() {
-  const msg = document.getElementById("message");
+  const msg2 = document.getElementById("message2");
 
   if (!charData) {
-    msg.innerHTML = "Valide o personagem primeiro.";
+    msg2.innerHTML = "Valide o personagem antes.";
     return;
   }
 
-  const requested = document.getElementById("requestedAccess").value.trim();
+  const req = document.getElementById("requestedAccess").value.trim();
   const notes = document.getElementById("notes").value.trim();
 
-  if (!requested) {
-    msg.innerHTML = "Informe a quest/boss.";
+  if (!req) {
+    msg2.innerHTML = "Informe a quest/boss.";
     return;
   }
 
-  msg.innerHTML = "Enviando...";
+  msg2.innerHTML = "Enviando...";
 
   const payload = {
     charName: charData.name,
     level: charData.level,
     vocation: charData.vocation,
-    requestedAccess: requested,
+    requestedAccess: req,
     notes: notes
   };
 
@@ -250,15 +252,15 @@ async function submitForm() {
     const out = await res.json();
 
     if (out.success) {
-      msg.innerHTML = "Registrado com sucesso!";
+      msg2.innerHTML = "Acesso registrado com sucesso!";
       document.getElementById("requestedAccess").value = "";
       document.getElementById("notes").value = "";
     } else {
-      msg.innerHTML = "Erro ao salvar.";
+      msg2.innerHTML = "Erro ao salvar.";
     }
 
   } catch {
-    msg.innerHTML = "Erro ao enviar.";
+    msg2.innerHTML = "Erro ao enviar.";
   }
 }
 
