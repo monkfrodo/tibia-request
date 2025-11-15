@@ -2,46 +2,57 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Tibia Access Request</title>
+<title>Tibia Quest Access</title>
 
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background: #0b1220;
-    color: #fff;
-    padding: 0;
+    font-family: Tahoma, sans-serif;
+    background: url('https://static.tibia.com/images/global/background/bg_blue.jpg');
+    background-size: cover;
+    color: #e5e5e5;
     margin: 0;
+    padding: 0;
   }
 
   .container {
-    max-width: 420px;
-    margin: 50px auto;
-    background: #111827;
+    max-width: 520px;
+    margin: 60px auto;
+    background: rgba(0, 0, 0, 0.75);
     padding: 25px;
-    border-radius: 12px;
-    border: 1px solid #1f2937;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    border-radius: 10px;
+    border: 3px solid #b99332;
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+  }
+
+  h1 {
+    font-size: 28px;
+    text-align: center;
+    color: #ffd76a;
+    text-shadow: 2px 2px 4px #000;
   }
 
   h2 {
+    font-size: 18px;
     text-align: center;
-    margin-top: 0;
-    font-weight: 600;
+    color: #fff;
+    margin-top: -10px;
+    font-weight: normal;
   }
 
   label {
-    font-size: 14px;
     margin-top: 15px;
     display: block;
+    font-size: 15px;
+    color: #ffd76a;
   }
 
-  input, textarea {
+  input, select, textarea {
     width: 100%;
     padding: 10px;
     margin-top: 6px;
-    border-radius: 8px;
-    border: 1px solid #334155;
-    background: #1e293b;
+    border-radius: 6px;
+    border: 1px solid #463200;
+    background: #1b1b1b;
     color: #fff;
     font-size: 15px;
   }
@@ -54,24 +65,40 @@
   button {
     width: 100%;
     padding: 12px;
-    background: #3b82f6;
-    border: none;
-    border-radius: 8px;
     margin-top: 20px;
+    background: #b99332;
+    border: none;
+    border-radius: 6px;
     font-size: 16px;
     font-weight: bold;
-    color: #fff;
+    color: #000;
     cursor: pointer;
+    border: 2px solid #e5c068;
+    text-shadow: 1px 1px 0px #fff;
   }
 
   button:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.15);
+  }
+
+  #char-info {
+    margin-top: 15px;
+    padding: 12px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 6px;
+    display: none;
+  }
+
+  #step2, #step3 {
+    display: none;
   }
 
   #message {
     margin-top: 15px;
     text-align: center;
     font-size: 15px;
+    color: #ffd76a;
   }
 </style>
 
@@ -79,41 +106,50 @@
 <body>
 
 <div class="container">
-  <h2>Request Access</h2>
 
-  <label>Character Name *</label>
+  <h1>Tibia Access Tool</h1>
+  <h2>Organize seus acessos de quests e bosses</h2>
+
+  <!-- STEP 1: VALIDAR CHAR -->
+  <label>Nome do Personagem *</label>
   <input id="charName" placeholder="Ex: Hecks Leads">
+  <button onclick="validateChar()">Validar Personagem</button>
 
-  <label>Quest / Boss *</label>
-  <input id="requestedAccess" placeholder="Ex: Roshamuul, Falcon, Warzone...">
+  <div id="char-info"></div>
 
-  <label>Notes (optional)</label>
-  <textarea id="notes" placeholder="Horários disponíveis, time, world transfer, etc."></textarea>
+  <!-- STEP 2: APÓS VALIDAR -->
+  <div id="step2">
+    <label>Quest / Boss *</label>
+    <input id="requestedAccess" placeholder="Ex: Roshamuul, Falcon, Warzone...">
+  </div>
 
-  <button onclick="submitForm()">Enviar Pedido</button>
+  <!-- STEP 3: NOTAS + ENVIAR -->
+  <div id="step3">
+    <label>Notas (opcional)</label>
+    <textarea id="notes" placeholder="Horários disponíveis, time, world transfer, etc."></textarea>
 
-  <p id="message"></p>
+    <button onclick="submitForm()">Enviar Pedido</button>
+    <p id="message"></p>
+  </div>
+
 </div>
 
+
 <script>
-async function submitForm() {
+
+async function validateChar() {
   let name = document.getElementById("charName").value.trim();
-  let req = document.getElementById("requestedAccess").value.trim();
-  let notes = document.getElementById("notes").value.trim();
   let message = document.getElementById("message");
+  let infoBox = document.getElementById("char-info");
 
-  message.innerHTML = "";
-
-  if (!name || !req) {
-    message.innerHTML = "Preencha o nome do char e a quest/boss.";
+  if (!name) {
+    message.innerHTML = "Digite o nome do personagem.";
     return;
   }
 
-  message.innerHTML = "Consultando personagem...";
+  message.innerHTML = "Validando personagem...";
 
-  // 1. Buscar level + vocação na TibiaData
   let url = `https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`;
-
   let r = await fetch(url);
   let json = await r.json();
 
@@ -123,7 +159,35 @@ async function submitForm() {
   }
 
   let c = json.character.character;
-  let payload = {
+
+  infoBox.style.display = "block";
+  infoBox.innerHTML = `
+    <b>Nome:</b> ${c.name}<br>
+    <b>Level:</b> ${c.level}<br>
+    <b>Vocação:</b> ${c.vocation}
+  `;
+
+  message.innerHTML = "";
+
+  // liberar próximo passo
+  window.charData = c;
+  document.getElementById("step2").style.display = "block";
+  document.getElementById("step3").style.display = "block";
+}
+
+
+async function submitForm() {
+  let c = window.charData;
+  let req = document.getElementById("requestedAccess").value.trim();
+  let notes = document.getElementById("notes").value.trim();
+  let message = document.getElementById("message");
+
+  if (!req) {
+    message.innerHTML = "Digite a quest/boss.";
+    return;
+  }
+
+  const payload = {
     charName: c.name,
     level: c.level,
     vocation: c.vocation,
@@ -131,10 +195,9 @@ async function submitForm() {
     notes: notes
   };
 
-  message.innerHTML = "Enviando para o Banco de Dados...";
+  const backendUrl = "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec";
 
-  // 2. Enviar para o Apps Script
-  let backendUrl = "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec";
+  message.innerHTML = "Enviando...";
 
   let res = await fetch(backendUrl, {
     method: "POST",
@@ -145,13 +208,13 @@ async function submitForm() {
 
   if (final.success) {
     message.innerHTML = "Pedido registrado com sucesso!";
-    document.getElementById("charName").value = "";
     document.getElementById("requestedAccess").value = "";
     document.getElementById("notes").value = "";
   } else {
     message.innerHTML = "Erro ao salvar. Tente novamente.";
   }
 }
+
 </script>
 
 </body>
