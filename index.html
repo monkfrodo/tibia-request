@@ -58,12 +58,6 @@
         text-shadow: 1px 1px 2px black;
     }
 
-    .subtitle {
-        color: #ddd;
-        font-size: 13px;
-        margin-bottom: 22px;
-    }
-
     input {
         width: 100%;
         padding: 12px;
@@ -79,6 +73,12 @@
         color: #aaa;
     }
 
+    .subtitle {
+        color: #ddd;
+        font-size: 13px;
+        margin-bottom: 22px;
+    }
+
     button {
         width: 100%;
         padding: 14px;
@@ -89,11 +89,6 @@
         cursor: pointer;
         font-size: 15px;
         transition: 0.2s;
-        margin-top: 2px;
-    }
-
-    button:hover {
-        background: #b8943e;
     }
 
     .result-box {
@@ -108,13 +103,11 @@
         font-size: 14px;
     }
 
-    .error { color: #ff6b6b; font-weight: bold; }
-
-    @media (max-width: 480px) {
-        .card {
-            padding: 28px 18px 24px;
-        }
+    .error {
+        color: #ff6b6b;
+        font-weight: bold;
     }
+
 </style>
 </head>
 <body>
@@ -125,166 +118,107 @@
     <div class="card">
 
         <div class="icon">
-            <img src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif" alt="Ferumbras">
+            <img src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif">
         </div>
 
         <h1>Tibia Access Manager</h1>
-        <div class="subtitle">
-            Valide seu personagem e registre pedidos de acesso a quests e bosses.
-        </div>
+        <div class="subtitle">Valide seu personagem e registre pedidos de acesso.</div>
 
-        <!-- Nome do personagem -->
-        <input id="charName" type="text" placeholder="Digite o nome do personagem">
+        <input id="charName" placeholder="Digite o nome do personagem">
 
-        <button type="button" onclick="validateCharacter()">Validar personagem</button>
+        <button onclick="validateCharacter()">Validar personagem</button>
 
-        <!-- Resultado -->
         <div id="charResult" class="result-box"></div>
 
-        <!-- Quest / Boss -->
-        <input id="questName" type="text" list="questsList"
-               placeholder="Digite a quest/boss (autocomplete)"
-               style="display:none; margin-top:18px;">
+        <input id="questName" list="questsList" placeholder="Quest / Boss" style="display:none;">
         <datalist id="questsList"></datalist>
 
-        <button id="sendButton" type="button" onclick="sendRequest()" style="display:none;">
-            Enviar pedido
-        </button>
+        <button id="sendButton" onclick="sendRequest()" style="display:none;">Enviar pedido</button>
 
     </div>
 </div>
 
 <script>
-// -------------------------------------------------
-// Variáveis globais pra guardar level e vocação
-// -------------------------------------------------
 let currentLevel = null;
-let currentVocation = null;
+let currentVoc = null;
 
-// -------------------------------------------------
-// 1) Carregar quests.json para autocomplete
-// -------------------------------------------------
+// Load quests.json
 fetch("quests.json")
-    .then(res => res.json())
+    .then(r => r.json())
     .then(list => {
-        const quests = Array.isArray(list) ? list : [];
-        const dl = document.getElementById("questsList");
-
-        quests.sort().forEach(q => {
+        list.forEach(q => {
             const opt = document.createElement("option");
             opt.value = q;
-            dl.appendChild(opt);
+            document.getElementById("questsList").appendChild(opt);
         });
-    })
-    .catch(err => {
-        console.error("Erro carregando quests.json:", err);
     });
 
-// -------------------------------------------------
-// 2) Validar personagem (TibiaData v2)
-// -------------------------------------------------
 async function validateCharacter() {
     const name = document.getElementById("charName").value.trim();
     const box  = document.getElementById("charResult");
-    const questInput = document.getElementById("questName");
-    const sendBtn    = document.getElementById("sendButton");
 
     if (!name) {
         box.style.display = "block";
         box.innerHTML = "<span class='error'>Digite o nome do personagem.</span>";
-        questInput.style.display = "none";
-        sendBtn.style.display = "none";
         return;
     }
 
     box.style.display = "block";
-    box.innerHTML = "<span style='color:#ccc;'>Validando...</span>";
-    questInput.style.display = "none";
-    sendBtn.style.display    = "none";
-    currentLevel = null;
-    currentVocation = null;
+    box.innerHTML = "Validando...";
+
+    const url = "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec?char=" + encodeURIComponent(name);
 
     try {
-        // TibiaData v2 (estrutura documentada)
-        const url = `https://api.tibiadata.com/v2/characters/${encodeURIComponent(name)}.json`;
         const res = await fetch(url);
-        if (!res.ok) {
-            box.innerHTML = "<span class='error'>❌ Erro na API do TibiaData.</span>";
-            return;
-        }
-
         const data = await res.json();
-        // Estrutura: data.characters.data.name / level / vocation
-        const c = data.characters && data.characters.data;
 
-        if (!c || !c.name) {
+        if (!data.found) {
             box.innerHTML = "<span class='error'>❌ Personagem não encontrado.</span>";
+            document.getElementById("questName").style.display = "none";
+            document.getElementById("sendButton").style.display = "none";
             return;
         }
 
-        currentLevel = c.level;
-        currentVocation = c.vocation;
+        currentLevel = data.level;
+        currentVoc   = data.vocation;
 
         box.innerHTML = `
-            <strong>Nome:</strong> ${c.name}<br>
-            <strong>Nível:</strong> ${c.level}<br>
-            <strong>Vocação:</strong> ${c.vocation}
+            <strong>Nome:</strong> ${data.name}<br>
+            <strong>Nível:</strong> ${data.level}<br>
+            <strong>Vocação:</strong> ${data.vocation}
         `;
 
-        questInput.style.display = "block";
-        sendBtn.style.display    = "block";
+        document.getElementById("questName").style.display = "block";
+        document.getElementById("sendButton").style.display = "block";
 
-    } catch (err) {
-        console.error(err);
-        box.innerHTML = "<span class='error'>Erro ao validar personagem.</span>";
-        questInput.style.display = "none";
-        sendBtn.style.display    = "none";
+    } catch(e) {
+        box.innerHTML = "<span class='error'>❌ Erro ao validar personagem.</span>";
     }
 }
 
-// -------------------------------------------------
-// 3) Enviar pedido para o Apps Script (sem mexer nele)
-// -------------------------------------------------
 async function sendRequest() {
-    const name  = document.getElementById("charName").value.trim();
+    const char  = document.getElementById("charName").value.trim();
     const quest = document.getElementById("questName").value.trim();
 
-    if (!name) {
-        alert("Valide o personagem antes de enviar.");
-        return;
-    }
-    if (!quest) {
-        alert("Digite a quest/boss.");
-        return;
-    }
+    if (!char || !quest) return alert("Preencha tudo.");
 
     const payload = {
-        charName: name,
-        level: currentLevel ?? "-",
-        vocation: currentVocation ?? "-",
+        charName: char,
+        level: currentLevel,
+        vocation: currentVoc,
         requestedAccess: quest,
         notes: ""
     };
 
-    try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec", {
+    await fetch(
+        "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec",
+        {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
-        });
-
-        if (!res.ok) {
-            alert("Erro ao registrar pedido (Apps Script).");
-            return;
         }
+    );
 
-        alert("Pedido registrado com sucesso!");
-        document.getElementById("questName").value = "";
-
-    } catch (err) {
-        console.error(err);
-        alert("Erro de rede ao enviar pedido.");
-    }
+    alert("Pedido registrado!");
 }
 </script>
 
