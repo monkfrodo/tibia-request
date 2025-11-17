@@ -5,141 +5,95 @@
 <title>Tibia Access Tool</title>
 
 <style>
-  /* BACKGROUND */
   body {
     margin: 0;
     padding: 0;
-    background: #1a1a1a;
+    background: radial-gradient(circle at top, #252933 0, #090b10 50%, #05060a 100%);
     color: #eaeaea;
-    font-family: "Inter", "Verdana", sans-serif;
+    font-family: "Inter", sans-serif;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    min-height: 100vh;
   }
 
-  /* CARD CENTRAL */
   .card {
-    background: #2a2a2a;
     width: 420px;
-    padding: 40px 36px;
-    border-radius: 14px;
-    margin-top: 60px;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.35);
-    position: relative;
+    margin-top: 64px;
+    padding: 32px 28px;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #22252f, #181a22);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.6),
+                0 0 0 1px rgba(255,255,255,0.03);
   }
 
   .sprite {
     display: flex;
     justify-content: center;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
   }
-
   .sprite img {
     width: 54px;
-    opacity: 0.95;
     image-rendering: pixelated;
+    animation: pulse 2.4s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: .95; }
+    50% { transform: scale(1.07); opacity: 1; }
   }
 
-  .title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
+  .title { text-align:center; font-size:22px; font-weight:600; }
+  .subtitle { text-align:center; font-size:13px; color:#b9bdc8; margin-bottom:22px; }
 
-  .subtitle {
-    text-align: center;
-    font-size: 14px;
-    color: #bcbcbc;
-    margin-bottom: 28px;
-  }
-
-  label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 6px;
-    color: #e1e1e1;
-    margin-top: 16px;
-  }
-
+  label { margin-top:14px; display:block; font-size:13px; }
   input, textarea {
-    width: 100%;
-    padding: 12px;
-    background: #1f1f1f;
-    border: 1px solid #3a3a3a;
-    border-radius: 6px;
-    font-size: 14px;
-    color: #f2f2f2;
-    margin-bottom: 12px;
-    transition: 0.2s;
+    width:100%; padding:11px 12px; border-radius:8px; 
+    background:#171921; border:1px solid #343846;
+    color:#fff; font-size:14px;
+  }
+  textarea { min-height:76px; resize:vertical; }
+
+  button {
+    width:100%; margin-top:15px; padding:12px 16px;
+    border-radius:999px; border:none; cursor:pointer;
+    font-weight:600; font-size:14px;
   }
 
-  input:focus, textarea:focus {
-    border-color: #4f8cff;
-    box-shadow: 0 0 0 2px rgba(79,140,255,0.4);
-    outline: none;
+  .btn-primary {
+    background:linear-gradient(135deg, #4f8cff, #3760ff);
+    color:#fff;
+  }
+  .btn-accent {
+    background:linear-gradient(135deg, #f3b22f, #ff9a1a);
+    color:#1f1300;
   }
 
-  textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-
-  /* BOTÕES */
-  .btn-blue {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    background: #4f8cff;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 600;
-    color: white;
-    cursor: pointer;
-    transition: 0.15s;
-  }
-
-  .btn-blue:hover {
-    background: #6da2ff;
-  }
-
-  .btn-yellow {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    background: #f1b42c;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #3b2a00;
-    cursor: pointer;
-    transition: 0.15s;
-  }
-
-  .btn-yellow:hover {
-    background: #ffcc47;
-  }
-
-  /* INFO DO CHAR */
   #char-info {
-    display: none;
-    background: #232323;
-    border: 1px solid #3f3f3f;
-    border-radius: 6px;
-    padding: 12px;
-    margin-top: 10px;
-    font-size: 14px;
+    display:none;
+    background:rgba(15,182,120,0.1);
+    border:1px solid rgba(56,190,143,0.5);
+    padding:10px; margin-top:10px; border-radius:8px;
   }
 
-  .message {
-    text-align: center;
-    margin-top: 12px;
-    font-size: 14px;
-    font-weight: 600;
+  .message { font-size:13px; margin-top:8px; text-align:center; min-height:18px;}
+  .error { color:#ff9b9b; }
+  .success { color:#a7ffce; }
+  .info { color:#bcd3ff; }
+
+  /* Autocomplete */
+  .suggestions {
+    background:#11131a;
+    border:1px solid #303344;
+    border-radius:8px;
+    max-height:200px;
+    overflow-y:auto;
+    margin-top:4px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.5);
   }
+  .suggestion-item {
+    padding:8px 10px; cursor:pointer; font-size:13px;
+  }
+  .suggestion-item:hover { background:#1d2030; }
 
 </style>
 </head>
@@ -148,131 +102,192 @@
 <div class="card">
 
   <div class="sprite">
-    <img src="https://static.tibia.com/images/global/items/key.gif" alt="key">
+    <img src="https://www.tibiawiki.com.br/images/7/7b/Quest_Log_Icon.gif">
   </div>
 
   <div class="title">Tibia Access Tool</div>
-  <div class="subtitle">Gerencie seus acessos com simplicidade e estilo.</div>
+  <div class="subtitle">Registre acessos de quests, bosses e atividades.</div>
 
   <label>Nome do personagem</label>
-  <input id="charName" placeholder="Ex: Hecks Leads">
+  <input id="charName" placeholder="Ex: Kevin Eger">
 
-  <button class="btn-blue" onclick="validateChar()">Validar personagem</button>
+  <button class="btn-primary" onclick="validateChar()">Validar personagem</button>
 
   <div id="char-info"></div>
   <div id="message" class="message"></div>
 
-  <div id="step2" style="display:none; margin-top:20px;">
+  <div id="step2" style="display:none;">
+
     <label>Quest / Boss desejado</label>
-    <input id="requestedAccess" placeholder="Ex: Roshamuul, Falcon, Warzone...">
+    <div style="position:relative;">
+      <input id="requestedAccess" autocomplete="off" placeholder="Ex: Roshamuul, Falcon, Warzone...">
+      <div id="suggestions" class="suggestions" style="display:none;"></div>
+    </div>
 
     <label>Notas adicionais</label>
-    <textarea id="notes" placeholder="Horários, progressão, observações..."></textarea>
+    <textarea id="notes" placeholder="Horário, progressão..."></textarea>
 
-    <button class="btn-yellow" onclick="submitForm()">Enviar acesso</button>
+    <button class="btn-accent" onclick="submitForm()">Registrar acesso</button>
     <div id="message2" class="message"></div>
   </div>
 
 </div>
 
 <script>
+  /* SUA URL DO APP SCRIPT */
+  const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec";
 
-let charData = null;
+  let charData = null;
+  let allSuggestions = [];
+  let localQuestList = [];
 
-async function validateChar() {
-  const name = document.getElementById("charName").value.trim();
-  const msg = document.getElementById("message");
-  const info = document.getElementById("char-info");
-  const step2 = document.getElementById("step2");
+  /* 1. CARREGAR JSON LOCAL */
+  fetch("quests.json")
+    .then(r => r.json())
+    .then(data => {
+      localQuestList = data;
+      console.log("JSON carregado:", localQuestList.length, "entradas");
+    });
 
-  msg.innerHTML = "";
-  info.style.display = "none";
-  step2.style.display = "none";
+  /* 2. CARREGAR SUGESTÕES DA PLANILHA (LAZY) */
+  window.addEventListener("load", async () => {
+    try {
+      const res = await fetch(BACKEND_URL + "?action=suggestions");
+      const json = await res.json();
+      allSuggestions = json.suggestions || [];
+      console.log("Planilha carregada:", allSuggestions.length, "entradas");
+    } catch(e) {
+      console.log("Erro ao carregar sugestões:", e);
+    }
+  });
 
-  if (!name) {
-    msg.innerHTML = "Digite o nome do personagem.";
-    return;
+  /* VALIDAR PERSONAGEM */
+  async function validateChar() {
+    const name = document.getElementById("charName").value.trim();
+    const msg = document.getElementById("message");
+    const info = document.getElementById("char-info");
+
+    msg.className = "message info";
+    msg.innerHTML = "Validando...";
+
+    try {
+      const res = await fetch(`https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`);
+      const json = await res.json();
+
+      if (!json.character || !json.character.character) {
+        msg.className = "message error";
+        msg.innerHTML = "Personagem não encontrado.";
+        return;
+      }
+
+      const c = json.character.character;
+      charData = c;
+
+      info.innerHTML = `<b>${c.name}</b><br>Level ${c.level} • ${c.vocation}`;
+      info.style.display = "block";
+
+      msg.className = "message success";
+      msg.innerHTML = "Personagem validado!";
+      document.getElementById("step2").style.display = "block";
+
+    } catch(e) {
+      msg.className = "message error";
+      msg.innerHTML = "Erro ao validar personagem.";
+    }
   }
 
-  msg.innerHTML = "Validando...";
+  /* SALVAR ACESSO */
+  async function submitForm() {
+    const req = document.getElementById("requestedAccess").value.trim();
+    const notes = document.getElementById("notes").value.trim();
+    const msg2 = document.getElementById("message2");
 
-  try {
-    const data = await fetch(
-      `https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`
-    );
-    const json = await data.json();
-
-    if (!json.character || !json.character.character) {
-      msg.innerHTML = "Personagem não encontrado.";
+    if (!charData) {
+      msg2.className = "message error";
+      msg2.innerHTML = "Valide o personagem antes.";
+      return;
+    }
+    if (!req) {
+      msg2.className = "message error";
+      msg2.innerHTML = "Digite a quest/boss.";
       return;
     }
 
-    const c = json.character.character;
-    charData = c;
+    msg2.className = "message info";
+    msg2.innerHTML = "Salvando...";
 
-    info.style.display = "block";
-    info.innerHTML = `
-      <b>${c.name}</b><br>
-      Level ${c.level} • ${c.vocation}
-    `;
+    const payload = {
+      charName: charData.name,
+      level: charData.level,
+      vocation: charData.vocation,
+      requestedAccess: req,
+      notes: notes
+    };
 
-    msg.innerHTML = "";
-    step2.style.display = "block";
-
-  } catch {
-    msg.innerHTML = "Erro ao validar personagem.";
-  }
-}
-
-async function submitForm() {
-  const msg2 = document.getElementById("message2");
-
-  if (!charData) {
-    msg2.innerHTML = "Valide o personagem antes.";
-    return;
-  }
-
-  const req = document.getElementById("requestedAccess").value.trim();
-  const notes = document.getElementById("notes").value.trim();
-
-  if (!req) {
-    msg2.innerHTML = "Informe a quest/boss.";
-    return;
-  }
-
-  msg2.innerHTML = "Enviando...";
-
-  const payload = {
-    charName: charData.name,
-    level: charData.level,
-    vocation: charData.vocation,
-    requestedAccess: req,
-    notes: notes
-  };
-
-  try {
-    const res = await fetch(
-      "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec",
-      {
+    try {
+      const res = await fetch(BACKEND_URL, {
         method: "POST",
         body: JSON.stringify(payload)
+      });
+      const out = await res.json();
+
+      if (out.success) {
+        msg2.className = "message success";
+        msg2.innerHTML = "Acesso registrado!";
+        document.getElementById("requestedAccess").value = "";
+        document.getElementById("notes").value = "";
+      } else {
+        msg2.className = "message error";
+        msg2.innerHTML = "Falha ao salvar.";
       }
-    );
+    } catch(e) {
+      msg2.className = "message error";
+      msg2.innerHTML = "Erro de comunicação.";
+    }
+  }
 
-    const out = await res.json();
+  /* AUTOCOMPLETE */
+  const questInput = document.getElementById("requestedAccess");
+  const suggestionsBox = document.getElementById("suggestions");
 
-    if (out.success) {
-      msg2.innerHTML = "Acesso registrado com sucesso!";
-      document.getElementById("requestedAccess").value = "";
-      document.getElementById("notes").value = "";
-    } else {
-      msg2.innerHTML = "Erro ao salvar.";
+  questInput.addEventListener("input", () => {
+    const term = questInput.value.trim().toLowerCase();
+    if (!term) {
+      suggestionsBox.style.display = "none";
+      return;
     }
 
-  } catch {
-    msg2.innerHTML = "Erro ao enviar.";
-  }
-}
+    const combined = [...new Set([...localQuestList, ...allSuggestions])];
+
+    const filtered = combined
+      .filter(q => q.toLowerCase().includes(term))
+      .slice(0, 12);
+
+    if (filtered.length === 0) {
+      suggestionsBox.style.display = "none";
+      return;
+    }
+
+    suggestionsBox.innerHTML = "";
+    filtered.forEach(q => {
+      const div = document.createElement("div");
+      div.textContent = q;
+      div.className = "suggestion-item";
+      div.onclick = () => {
+        questInput.value = q;
+        suggestionsBox.style.display = "none";
+      };
+      suggestionsBox.appendChild(div);
+    });
+
+    suggestionsBox.style.display = "block";
+  });
+
+  document.addEventListener("click", (e) => {
+    if (e.target !== questInput) {
+      suggestionsBox.style.display = "none";
+    }
+  });
 
 </script>
 
