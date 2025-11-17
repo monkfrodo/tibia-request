@@ -1,106 +1,142 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tibia Access Manager</title>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
-
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: "Montserrat", sans-serif;
-        background: url('https://www.tibiabr.com/wp-content/uploads/2020/01/paulo-silvente-roshamuul-ld-alternative.jpg') no-repeat center center fixed;
-        background-size: cover;
+    :root {
+        --gold: #d6b25a;
+        --gold-dark: #b8953f;
+        --bg-dark: rgba(0,0,0,0.78);
     }
 
-    /* overlay */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Verdana", sans-serif;
+    }
+
+    body {
+        background: url("https://www.tibiabr.com/wp-content/uploads/2020/01/paulo-silvente-roshamuul-ld-alternative.jpg")
+            no-repeat center center fixed;
+        background-size: cover;
+        min-height: 100vh;
+    }
+
+    /* overlay por cima do fundo, mas NÃO empurra nada */
     .overlay {
         position: fixed;
         inset: 0;
         background: rgba(0,0,0,0.55);
         backdrop-filter: blur(4px);
+        z-index: 1;
     }
 
-    /* container principal */
-    .center-box {
-        position: relative;
-        z-index: 10;
-        width: 90%;
-        max-width: 600px;
-        margin: 120px auto;
-        background: rgba(0,0,0,0.75);
-        border: 1px solid rgba(255,215,0,0.4);
+    /* wrapper que centraliza o card */
+    .wrapper {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        z-index: 2;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 520px;
+        background: var(--bg-dark);
         border-radius: 16px;
-        padding: 40px;
+        border: 1px solid rgba(255,215,0,0.4);
+        box-shadow: 0 0 32px rgba(0,0,0,0.8);
+        padding: 36px 32px 32px;
         text-align: center;
-        box-shadow: 0 0 50px rgba(0,0,0,0.65);
     }
 
-    h1 {
-        color: #f2d37a;
-        margin-top: 10px;
-        font-size: 28px;
-        font-weight: 700;
-    }
-
-    p {
-        color: #ddd;
-        font-size: 14px;
-        margin-bottom: 25px;
-    }
-
-    /* Ícone */
-    .icon img {
-        width: 48px;
-        height: 48px;
+    .icon {
         margin-bottom: 10px;
     }
 
-    /* Inputs */
-    input {
-        width: 100%;
-        padding: 14px;
-        margin-bottom: 18px;
-        border-radius: 6px;
-        border: 1px solid #444;
-        background: #1b1b1b;
-        color: white;
-        font-size: 15px;
+    .icon img {
+        width: 52px;
+        height: 52px;
+        image-rendering: pixelated;
     }
 
-    /* Botões */
+    h1 {
+        font-size: 26px;
+        color: #f5d98b;
+        margin-bottom: 8px;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px #000;
+    }
+
+    .subtitle {
+        font-size: 13px;
+        color: #ddd;
+        margin-bottom: 22px;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #555;
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    input::placeholder {
+        color: #aaa;
+    }
+
     button {
         width: 100%;
-        padding: 14px;
-        background: #d7b354;
-        border: none;
+        padding: 13px;
         border-radius: 6px;
-        font-weight: 700;
+        border: none;
+        background: var(--gold);
+        color: #000;
+        font-weight: bold;
         font-size: 15px;
         cursor: pointer;
-        transition: 0.2s;
+        transition: background 0.15s ease, transform 0.05s ease;
+        margin-bottom: 10px;
     }
 
     button:hover {
-        background: #b8933b;
+        background: var(--gold-dark);
+        transform: translateY(-1px);
     }
 
-    /* Caixa de resultado */
     .result-box {
-        margin-top: 15px;
-        padding: 15px;
+        display: none;
+        margin-top: 12px;
+        padding: 12px;
         border-radius: 8px;
-        background: rgba(0,0,0,0.4);
-        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0,0,0,0.55);
+        border: 1px solid rgba(255,215,0,0.35);
         text-align: left;
+        color: #fff;
+        font-size: 14px;
+        line-height: 1.5;
     }
 
     .error {
         color: #ff6b6b;
-        font-weight: 600;
+        font-weight: bold;
+    }
+
+    @media (max-width: 480px) {
+        .card {
+            padding: 28px 20px 24px;
+        }
     }
 </style>
 </head>
@@ -108,122 +144,142 @@
 <body>
 <div class="overlay"></div>
 
-<div class="center-box">
+<div class="wrapper">
+    <div class="card">
 
-    <div class="icon">
-        <img src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif">
+        <div class="icon">
+            <img src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif" alt="Ferumbras">
+        </div>
+
+        <h1>Tibia Access Manager</h1>
+        <div class="subtitle">
+            Valide seu personagem e registre acessos de quests e bosses.
+        </div>
+
+        <!-- Nome do personagem -->
+        <input id="charName" type="text" placeholder="Digite o nome do seu personagem">
+
+        <button type="button" onclick="validateCharacter()">Validar Personagem</button>
+
+        <!-- Resultado da validação -->
+        <div id="charResult" class="result-box"></div>
+
+        <!-- Campo de quest/boss (só aparece depois de validar) -->
+        <input id="questName" type="text" list="questsList"
+               placeholder="Digite a quest/boss (autocomplete)"
+               style="display:none; margin-top:16px;">
+        <datalist id="questsList"></datalist>
+
+        <button id="sendButton" type="button" onclick="sendRequest()" style="display:none;">
+            Enviar Pedido
+        </button>
     </div>
-
-    <h1>Tibia Access Manager</h1>
-    <p>Valide seu personagem e registre acessos de quests e bosses.</p>
-
-    <!-- Campo nome -->
-    <input id="charName" type="text" placeholder="Digite o nome do personagem">
-
-    <!-- Botão validar -->
-    <button onclick="validarPersonagem()">Validar Personagem</button>
-
-    <!-- Resultado -->
-    <div id="resultado" class="result-box" style="display:none;"></div>
-
-    <!-- Campo quest -->
-    <input id="questInput" list="questList" type="text" placeholder="Digite a quest/boss (autocomplete)" style="display:none;">
-    <datalist id="questList"></datalist>
-
-    <button id="btnEnviar" onclick="enviarPedido()" style="display:none;">Enviar Pedido</button>
-
 </div>
 
 <script>
-/* ===========================
-   1. Carregar JSON de quests
-=========================== */
-let quests = [];
+// =========================
+// 1) Carrega quests.json
+// =========================
+fetch("quests.json")
+    .then(res => res.json())
+    .then(data => {
+        // Se for array direto (como o seu), usa data;
+        // se vier em objeto { quests: [...] }, usa data.quests
+        const quests = Array.isArray(data) ? data : (data.quests || []);
+        const list = document.getElementById("questsList");
 
-async function loadQuests() {
-    try {
-        const res = await fetch("assets/data/quests.json");
-        const data = await res.json();
-
-        quests = data.quests || [];
-
-        const list = document.getElementById("questList");
-        list.innerHTML = "";
-
-        quests.forEach(q => {
-            let option = document.createElement("option");
-            option.value = q;
-            list.appendChild(option);
+        quests.sort().forEach(q => {
+            const opt = document.createElement("option");
+            opt.value = q;
+            list.appendChild(opt);
         });
+    })
+    .catch(err => {
+        console.error("Erro ao carregar quests.json:", err);
+    });
 
-    } catch (e) {
-        console.error("Erro ao carregar quests.json", e);
-    }
-}
+// =========================
+// 2) Validação do personagem
+//    usando TibiaData V4 CORRETAMENTE
+// =========================
+function validateCharacter() {
+    const name = document.getElementById("charName").value.trim();
+    const box  = document.getElementById("charResult");
+    const questInput = document.getElementById("questName");
+    const sendBtn    = document.getElementById("sendButton");
 
-loadQuests();
+    box.style.display = "block";
 
-/* ===========================
-   2. Validar personagem
-=========================== */
-async function validarPersonagem() {
-    const nome = document.getElementById("charName").value.trim();
-    const resultado = document.getElementById("resultado");
-
-    if (!nome) {
-        resultado.style.display = "block";
-        resultado.innerHTML = "<p class='error'>Digite um nome válido.</p>";
+    if (!name) {
+        box.innerHTML = "<span class='error'>Digite o nome do personagem.</span>";
+        questInput.style.display = "none";
+        sendBtn.style.display = "none";
         return;
     }
 
-    resultado.style.display = "block";
-    resultado.innerHTML = "<p style='color:#aaa;'>Validando...</p>";
+    box.innerHTML = "<span style='color:#ccc;'>Validando personagem...</span>";
 
-    try {
-        const url = `https://api.tibiadata.com/v4/character/${encodeURIComponent(nome)}`;
-        const res = await fetch(url);
-        const data = await res.json();
+    fetch(`https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`)
+        .then(res => res.json())
+        .then(data => {
+            // Estrutura correta do TibiaData v4
+            const c = data.characters && data.characters.character;
 
-        if (!data.character || data.character.error) {
-            resultado.innerHTML = "<p class='error'>❌ Personagem não encontrado.</p>";
-            return;
-        }
+            if (!c || c.error) {
+                box.innerHTML = "<span class='error'>❌ Personagem não encontrado.</span>";
+                questInput.style.display = "none";
+                sendBtn.style.display = "none";
+                return;
+            }
 
-        const char = data.character;
+            box.innerHTML = `
+                <strong>Nome:</strong> ${c.name}<br>
+                <strong>Nível:</strong> ${c.level}<br>
+                <strong>Vocação:</strong> ${c.vocation}
+            `;
 
-        resultado.innerHTML = `
-            <strong style="color:#f2d37a;">Nome:</strong> ${char.name}<br>
-            <strong style="color:#f2d37a;">Nível:</strong> ${char.level}<br>
-            <strong style="color:#f2d37a;">Vocação:</strong> ${char.vocation}
-        `;
-
-        // Habilitar próxima etapa
-        document.getElementById("questInput").style.display = "block";
-        document.getElementById("btnEnviar").style.display = "block";
-
-    } catch (err) {
-        resultado.innerHTML = "<p class='error'>Erro ao validar personagem.</p>";
-        console.error(err);
-    }
+            questInput.style.display = "block";
+            sendBtn.style.display    = "block";
+        })
+        .catch(err => {
+            console.error(err);
+            box.innerHTML = "<span class='error'>Erro ao validar personagem.</span>";
+            questInput.style.display = "none";
+            sendBtn.style.display    = "none";
+        });
 }
 
-/* ===========================
-   3. Enviar pedido ao script
-=========================== */
-async function enviarPedido() {
-    const nome = document.getElementById("charName").value.trim();
-    const quest = document.getElementById("questInput").value.trim();
+// =========================
+// 3) Envio para o Apps Script
+//    (mantém a lógica simples: POST JSON com nome + quest)
+// =========================
+function sendRequest() {
+    const name  = document.getElementById("charName").value.trim();
+    const quest = document.getElementById("questName").value.trim();
 
+    if (!name) {
+        alert("Valide o personagem antes de enviar.");
+        return;
+    }
     if (!quest) {
-        alert("Digite uma quest válida.");
+        alert("Digite a quest/boss.");
         return;
     }
 
-    const endpoint = "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec";
-
-    const res = await fetch(endpoint + `?action=add&name=${encodeURIComponent(nome)}&quest=${encodeURIComponent(quest)}`);
-
-    alert("Pedido registrado com sucesso!");
+    fetch("https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            character: name,
+            quest: quest
+        })
+    }).then(() => {
+        alert("Pedido registrado com sucesso!");
+        document.getElementById("questName").value = "";
+    }).catch(err => {
+        console.error(err);
+        alert("Erro ao registrar pedido.");
+    });
 }
 </script>
 
