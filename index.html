@@ -6,27 +6,16 @@
 <title>Tibia Access Manager</title>
 
 <style>
-    :root {
-        --gold: #d6b25a;
-        --gold-dark: #b8953f;
-        --bg-dark: rgba(0,0,0,0.78);
-    }
-
-    * {
-        box-sizing: border-box;
+    body {
         margin: 0;
         padding: 0;
-        font-family: "Verdana", sans-serif;
-    }
-
-    body {
+        font-family: Verdana, sans-serif;
         background: url("https://www.tibiabr.com/wp-content/uploads/2020/01/paulo-silvente-roshamuul-ld-alternative.jpg")
             no-repeat center center fixed;
         background-size: cover;
-        min-height: 100vh;
     }
 
-    /* overlay por cima do fundo, mas NÃO empurra nada */
+    /* overlay */
     .overlay {
         position: fixed;
         inset: 0;
@@ -35,234 +24,197 @@
         z-index: 1;
     }
 
-    /* wrapper que centraliza o card */
+    /* centralização */
     .wrapper {
         position: fixed;
         inset: 0;
         display: flex;
-        align-items: center;
         justify-content: center;
-        padding: 24px;
+        align-items: center;
+        padding: 30px;
         z-index: 2;
     }
 
+    /* card */
     .card {
+        background: rgba(0,0,0,0.75);
+        border: 1px solid rgba(255,215,0,0.4);
+        border-radius: 14px;
+        padding: 36px 28px 30px;
         width: 100%;
         max-width: 520px;
-        background: var(--bg-dark);
-        border-radius: 16px;
-        border: 1px solid rgba(255,215,0,0.4);
-        box-shadow: 0 0 32px rgba(0,0,0,0.8);
-        padding: 36px 32px 32px;
         text-align: center;
-    }
-
-    .icon {
-        margin-bottom: 10px;
+        box-shadow: 0 0 32px rgba(0,0,0,0.7);
     }
 
     .icon img {
-        width: 52px;
-        height: 52px;
+        width: 54px;
+        height: 54px;
+        margin-bottom: 12px;
         image-rendering: pixelated;
     }
 
     h1 {
-        font-size: 26px;
         color: #f5d98b;
-        margin-bottom: 8px;
-        font-weight: bold;
-        text-shadow: 1px 1px 2px #000;
+        font-size: 26px;
+        margin-bottom: 6px;
+        text-shadow: 1px 1px 2px black;
     }
 
     .subtitle {
-        font-size: 13px;
         color: #ddd;
+        font-size: 13px;
         margin-bottom: 22px;
     }
 
     input {
         width: 100%;
         padding: 12px;
-        border-radius: 6px;
-        border: 1px solid #555;
-        background: rgba(255,255,255,0.08);
-        color: #fff;
-        font-size: 14px;
         margin-bottom: 16px;
-    }
-
-    input::placeholder {
-        color: #aaa;
+        border: 1px solid #555;
+        background: rgba(255,255,255,0.06);
+        color: white;
+        border-radius: 6px;
+        font-size: 14px;
     }
 
     button {
         width: 100%;
-        padding: 13px;
+        padding: 14px;
         border-radius: 6px;
         border: none;
-        background: var(--gold);
-        color: #000;
+        background: #d6b25a;
         font-weight: bold;
-        font-size: 15px;
         cursor: pointer;
-        transition: background 0.15s ease, transform 0.05s ease;
-        margin-bottom: 10px;
+        font-size: 15px;
+        transition: 0.25s;
     }
 
     button:hover {
-        background: var(--gold-dark);
-        transform: translateY(-1px);
+        background: #b8943e;
     }
 
     .result-box {
         display: none;
-        margin-top: 12px;
-        padding: 12px;
-        border-radius: 8px;
         background: rgba(0,0,0,0.55);
         border: 1px solid rgba(255,215,0,0.35);
-        text-align: left;
+        padding: 12px;
         color: #fff;
+        border-radius: 8px;
+        margin-top: 12px;
+        text-align: left;
         font-size: 14px;
-        line-height: 1.5;
     }
 
-    .error {
-        color: #ff6b6b;
-        font-weight: bold;
-    }
-
-    @media (max-width: 480px) {
-        .card {
-            padding: 28px 20px 24px;
-        }
-    }
+    .error { color: #ff6b6b; font-weight: bold; }
 </style>
 </head>
-
 <body>
+
 <div class="overlay"></div>
 
 <div class="wrapper">
     <div class="card">
 
         <div class="icon">
-            <img src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif" alt="Ferumbras">
+            <img src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif">
         </div>
 
         <h1>Tibia Access Manager</h1>
-        <div class="subtitle">
-            Valide seu personagem e registre acessos de quests e bosses.
-        </div>
+        <div class="subtitle">Valide seu personagem e registre pedidos de acesso.</div>
 
-        <!-- Nome do personagem -->
-        <input id="charName" type="text" placeholder="Digite o nome do seu personagem">
+        <!-- Nome -->
+        <input id="charName" type="text" placeholder="Digite o nome do personagem">
 
         <button type="button" onclick="validateCharacter()">Validar Personagem</button>
 
-        <!-- Resultado da validação -->
         <div id="charResult" class="result-box"></div>
 
-        <!-- Campo de quest/boss (só aparece depois de validar) -->
-        <input id="questName" type="text" list="questsList"
-               placeholder="Digite a quest/boss (autocomplete)"
-               style="display:none; margin-top:16px;">
+        <!-- Quest -->
+        <input id="questName" type="text" list="questsList" placeholder="Digite a quest/boss"
+               style="display:none; margin-top: 18px;">
+
         <datalist id="questsList"></datalist>
 
         <button id="sendButton" type="button" onclick="sendRequest()" style="display:none;">
             Enviar Pedido
         </button>
+
     </div>
 </div>
 
 <script>
-// =========================
-// 1) Carrega quests.json
-// =========================
+// =======================================================
+// 1) Carregar QUESTS.JSON sem travar o script
+// =======================================================
 fetch("quests.json")
     .then(res => res.json())
-    .then(data => {
-        // Se for array direto (como o seu), usa data;
-        // se vier em objeto { quests: [...] }, usa data.quests
-        const quests = Array.isArray(data) ? data : (data.quests || []);
-        const list = document.getElementById("questsList");
+    .then(list => {
+        const quests = Array.isArray(list) ? list : [];
+        const dl = document.getElementById("questsList");
 
         quests.sort().forEach(q => {
             const opt = document.createElement("option");
             opt.value = q;
-            list.appendChild(opt);
+            dl.appendChild(opt);
         });
     })
-    .catch(err => {
-        console.error("Erro ao carregar quests.json:", err);
-    });
+    .catch(err => console.error("Erro carregando quests.json:", err));
 
-// =========================
-// 2) Validação do personagem
-//    usando TibiaData V4 CORRETAMENTE
-// =========================
-function validateCharacter() {
+
+// =======================================================
+// 2) VALIDAR PERSONAGEM — VERSÃO QUE FUNCIONAVA
+// =======================================================
+async function validateCharacter() {
     const name = document.getElementById("charName").value.trim();
     const box  = document.getElementById("charResult");
-    const questInput = document.getElementById("questName");
-    const sendBtn    = document.getElementById("sendButton");
-
-    box.style.display = "block";
 
     if (!name) {
+        box.style.display = "block";
         box.innerHTML = "<span class='error'>Digite o nome do personagem.</span>";
-        questInput.style.display = "none";
-        sendBtn.style.display = "none";
         return;
     }
 
-    box.innerHTML = "<span style='color:#ccc;'>Validando personagem...</span>";
+    box.style.display = "block";
+    box.innerHTML = "<span style='color:#ccc;'>Validando...</span>";
 
-    fetch(`https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`)
-        .then(res => res.json())
-        .then(data => {
-            // Estrutura correta do TibiaData v4
-            const c = data.characters && data.characters.character;
+    try {
+        const url = `https://api.tibiadata.com/v3/character/${encodeURIComponent(name)}`;
+        const res = await fetch(url);
+        const data = await res.json();
 
-            if (!c || c.error) {
-                box.innerHTML = "<span class='error'>❌ Personagem não encontrado.</span>";
-                questInput.style.display = "none";
-                sendBtn.style.display = "none";
-                return;
-            }
+        const c = data.characters?.character;
 
-            box.innerHTML = `
-                <strong>Nome:</strong> ${c.name}<br>
-                <strong>Nível:</strong> ${c.level}<br>
-                <strong>Vocação:</strong> ${c.vocation}
-            `;
+        if (!c || c.error) {
+            box.innerHTML = "<span class='error'>❌ Personagem não encontrado.</span>";
+            return;
+        }
 
-            questInput.style.display = "block";
-            sendBtn.style.display    = "block";
-        })
-        .catch(err => {
-            console.error(err);
-            box.innerHTML = "<span class='error'>Erro ao validar personagem.</span>";
-            questInput.style.display = "none";
-            sendBtn.style.display    = "none";
-        });
+        box.innerHTML = `
+            <strong>Nome:</strong> ${c.name}<br>
+            <strong>Nível:</strong> ${c.level}<br>
+            <strong>Vocação:</strong> ${c.vocation}
+        `;
+
+        document.getElementById("questName").style.display = "block";
+        document.getElementById("sendButton").style.display = "block";
+
+    } catch (err) {
+        console.error(err);
+        box.innerHTML = "<span class='error'>Erro ao validar personagem.</span>";
+    }
 }
 
-// =========================
-// 3) Envio para o Apps Script
-//    (mantém a lógica simples: POST JSON com nome + quest)
-// =========================
-function sendRequest() {
+
+// =======================================================
+// 3) ENVIAR PRO SEU APP SCRIPT (SEM ALTERAR NADA)
+// =======================================================
+async function sendRequest() {
     const name  = document.getElementById("charName").value.trim();
     const quest = document.getElementById("questName").value.trim();
 
-    if (!name) {
-        alert("Valide o personagem antes de enviar.");
-        return;
-    }
     if (!quest) {
-        alert("Digite a quest/boss.");
+        alert("Digite a quest.");
         return;
     }
 
@@ -270,15 +222,15 @@ function sendRequest() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            character: name,
-            quest: quest
+            charName: name,
+            level: "-",
+            vocation: "-",
+            requestedAccess: quest,
+            notes: ""
         })
     }).then(() => {
-        alert("Pedido registrado com sucesso!");
+        alert("Pedido registrado!");
         document.getElementById("questName").value = "";
-    }).catch(err => {
-        console.error(err);
-        alert("Erro ao registrar pedido.");
     });
 }
 </script>
