@@ -234,8 +234,9 @@ async function validateCharacter() {
     box.innerHTML = "Validando...";
 
     try {
-        // 🔥 NOVA API v3
-        const res = await fetch(`https://api.tibiadata.com/v3/character/${encodeURIComponent(name)}`);
+        // NOVA API OFICIAL DO TIBIA
+        const url = `https://api.tibia.com/v1/characters/${encodeURIComponent(name)}`;
+        const res = await fetch(url);
 
         if (!res.ok) {
             box.innerHTML = "<span class='error'>Erro ao consultar personagem.</span>";
@@ -244,7 +245,6 @@ async function validateCharacter() {
 
         const data = await res.json();
 
-        // 🔥 Estrutura nova da API
         const c = data.character;
 
         if (!c || !c.name) {
@@ -266,8 +266,8 @@ async function validateCharacter() {
         document.getElementById("sendButton").style.display = "block";
 
     } catch (err) {
-        box.innerHTML = "<span class='error'>Erro ao validar personagem.</span>";
         console.error(err);
+        box.innerHTML = "<span class='error'>Erro ao validar personagem.</span>";
     }
 }
 
