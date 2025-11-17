@@ -1,349 +1,224 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Tibia Access Tool</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tibia Access Manager</title>
 
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    background: #0a0c10 url('https://static.tibia.com/images/global/header/background-artwork.jpg') no-repeat center top / cover;
-    font-family: "Inter", sans-serif;
-    color: #eee;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-  }
+    /* ===== BACKGROUND ===== */
+    body {
+        margin: 0;
+        padding: 0;
+        background: url("https://www.tibiabr.com/wp-content/uploads/2020/01/paulo-silvente-roshamuul-ld-alternative.jpg")
+            no-repeat center center fixed;
+        background-size: cover;
+        font-family: "Verdana", sans-serif;
+        color: #fff;
+    }
 
-  .card {
-    width: 420px;
-    margin-top: 70px;
-    background: rgba(18, 20, 28, 0.92);
-    border-radius: 14px;
-    padding: 30px 26px 34px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.65);
-    border: 1px solid rgba(255,255,255,0.06);
-    backdrop-filter: blur(8px);
-  }
+    /* ===== FIRST OVERLAY (escurece imagem) ===== */
+    .overlay-dark {
+        background: rgba(0, 0, 0, 0.60);
+        backdrop-filter: blur(3px);
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        z-index: 1;
+    }
 
-  .sprite {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 12px;
-  }
+    /* ===== SECOND OVERLAY (gradiente dourado muito suave) ===== */
+    .overlay-gold {
+        background: linear-gradient(
+            to bottom,
+            rgba(171, 140, 53, 0.12) 0%,
+            rgba(0, 0, 0, 0.2) 40%,
+            rgba(171, 140, 53, 0.15) 100%
+        );
+        width: 100%;
+        min-height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+    }
 
-  .sprite img {
-    width: 52px;
-    height: 52px;
-    object-fit: contain;
-    image-rendering: crisp-edges;
-    animation: float 2.9s ease-in-out infinite;
-  }
+    /* ===== CONTAINER CENTRAL ===== */
+    .container {
+        position: relative;
+        z-index: 3;
+        max-width: 540px;
+        margin: 0 auto;
+        margin-top: 60px;
+        padding: 32px;
+        border-radius: 12px;
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-  }
+        background: rgba(0, 0, 0, 0.70);
+        border: 2px solid #c9a74a;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.7),
+                    0 0 12px rgba(255, 220, 80, 0.25);
+    }
 
-  .title {
-    text-align: center;
-    font-size: 23px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    margin-bottom: 4px;
-  }
+    /* ===== TITULOS ===== */
+    h1 {
+        font-size: 30px;
+        margin-bottom: 5px;
+        font-weight: bold;
+        text-shadow: 2px 2px 3px #000;
+        color: #f5d98b;
+    }
 
-  .subtitle {
-    text-align: center;
-    font-size: 13px;
-    color: #c4c9d6;
-    margin-bottom: 22px;
-    line-height: 1.4;
-  }
+    .subtitle {
+        font-size: 14px;
+        margin-bottom: 26px;
+        opacity: 0.9;
+    }
 
-  label {
-    font-size: 13px;
-    margin-top: 12px;
-    display: block;
-    margin-bottom: 6px;
-  }
+    /* ===== ICONE ===== */
+    .icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        image-rendering: pixelated;
+        border: 2px solid #c9a74a;
+        background: rgba(0,0,0,0.4);
+        padding: 4px;
+    }
 
-  input {
-    width: 100%;
-    padding: 11px 12px;
-    background: #1a1d27;
-    border: 1px solid #2f3342;
-    border-radius: 8px;
-    color: #e5e8f0;
-    font-size: 14px;
-  }
+    /* ===== INPUTS ===== */
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 16px;
+        background: #181818;
+        color: #fff;
+        border: 1px solid #8f6d2c;
+        border-radius: 6px;
+        font-size: 15px;
+        box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
+    }
 
-  input:focus {
-    outline: none;
-    border-color: #4f8cff;
-    box-shadow: 0 0 0 1px rgba(70,120,255,0.6);
-  }
+    input:focus {
+        outline: none;
+        border-color: #d9b04c;
+        box-shadow: 0 0 6px rgba(217,176,76,0.6);
+    }
 
-  .btn {
-    width: 100%;
-    padding: 12px 16px;
-    border: none;
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    margin-top: 14px;
-    transition: 0.15s;
-  }
+    /* ===== BOTAO ===== */
+    button {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(#c9a74a, #8f6d2c);
+        color: #000;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+    }
 
-  .btn-primary {
-    background: linear-gradient(135deg, #4f8cff, #3760ff);
-    color: #fff;
-  }
-  .btn-primary:hover {
-    filter: brightness(1.08);
-    transform: translateY(-1px);
-  }
+    button:hover {
+        background: linear-gradient(#e6c86a, #9c7a34);
+    }
 
-  .btn-accent {
-    background: linear-gradient(135deg, #f3b22f, #ff9a1a);
-    color: #1c1200;
-  }
-  .btn-accent:hover {
-    filter: brightness(1.09);
-    transform: translateY(-1px);
-  }
-
-  #char-info {
-    display: none;
-    background: rgba(56, 190, 143, 0.14);
-    border: 1px solid rgba(56, 190, 143, 0.45);
-    padding: 10px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    margin-top: 12px;
-  }
-
-  .message {
-    text-align: center;
-    min-height: 18px;
-    font-size: 13px;
-    margin-top: 10px;
-  }
-  .success { color: #b6ffd6; }
-  .error { color: #ff9b9b; }
-  .info { color: #bfd5ff; }
-
-  /* Autocomplete */
-  .suggestions {
-    background: #11131a;
-    border: 1px solid #2e3240;
-    border-radius: 8px;
-    margin-top: 4px;
-    max-height: 180px;
-    overflow-y: auto;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.55);
-    display: none;
-  }
-
-  .suggestion-item {
-    padding: 9px 12px;
-    cursor: pointer;
-    font-size: 13px;
-    color: #e9ecf6;
-  }
-
-  .suggestion-item:hover {
-    background: #1d2030;
-  }
+    /* ===== RESULTADOS ===== */
+    .result-box {
+        margin-top: 20px;
+        padding: 14px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.55);
+        border: 1px solid #c9a74a;
+        display: none;
+        text-align: left;
+        line-height: 1.6;
+    }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="overlay-dark"></div>
+<div class="overlay-gold"></div>
 
-  <div class="sprite">
-    <img src="https://i.imgur.com/RSu1z8F.png" onerror="this.src='https://static.tibia.com/images/global/header/favicon.ico'">
-  </div>
+<div class="container">
 
-  <div class="title">Tibia Access Tool</div>
-  <div class="subtitle">Valide seu personagem e selecione a quest ou boss que deseja fazer.</div>
+    <img class="icon" src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif" />
 
-  <label>Nome do personagem</label>
-  <input id="charName" placeholder="Ex: Kevin Eger">
+    <h1>Tibia Access Manager</h1>
+    <div class="subtitle">Valide seu personagem e registre acessos de quests e bosses.</div>
 
-  <button class="btn btn-primary" onclick="validateChar()">Validar personagem</button>
+    <input id="charName" placeholder="Digite o nome do seu personagem" />
+    <button onclick="validateCharacter()">Validar Personagem</button>
 
-  <div id="char-info"></div>
-  <div id="message" class="message"></div>
+    <div id="charResult" class="result-box"></div>
 
-  <div id="step2" style="display:none;">
+    <div id="questForm" style="display:none; margin-top: 20px;">
+        <input id="questName" list="questsList" placeholder="Digite a quest/boss desejado" />
+        <datalist id="questsList"></datalist>
 
-    <label>Quest / Boss desejado</label>
-    <div style="position:relative;">
-      <input id="requestedAccess" autocomplete="off" placeholder="Ex: Roshamuul, Falcon, Warzone...">
-      <div id="suggestions" class="suggestions"></div>
+        <button onclick="sendRequest()">Enviar Pedido</button>
     </div>
-
-    <button class="btn btn-accent" onclick="submitForm()">Registrar acesso</button>
-    <div id="message2" class="message"></div>
-
-  </div>
 
 </div>
 
+
 <script>
-  /* COLAR SUA URL AQUI */
-  const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec";
-
-  let charData = null;
-  let localQuestList = [];
-  let allSuggestions = [];
-
-  /* JSON */
-  fetch("quests.json")
+/* === CARREGAR QUESTS === */
+fetch("quests.json")
     .then(r => r.json())
-    .then(data => localQuestList = data)
-    .catch(e => console.error("Erro ao carregar JSON:", e));
-
-  /* Sugestões da planilha */
-  window.addEventListener("load", async () => {
-    try {
-      const res = await fetch(BACKEND_URL + "?action=suggestions");
-      const json = await res.json();
-      allSuggestions = json.suggestions || [];
-    } catch(e) {}
-  });
-
-  /* Validar personagem */
-  async function validateChar() {
-    const name = document.getElementById("charName").value.trim();
-    const msg = document.getElementById("message");
-    const info = document.getElementById("char-info");
-
-    msg.className = "message info";
-    msg.innerHTML = "Validando...";
-
-    try {
-      const res = await fetch(`https://api.tibiadata.com/v4/character/${encodeURIComponent(name)}`);
-      const json = await res.json();
-
-      if (!json.character || !json.character.character) {
-        msg.className = "message error";
-        msg.innerHTML = "Personagem não encontrado.";
-        return;
-      }
-
-      const c = json.character.character;
-      charData = c;
-
-      info.innerHTML = `<b>${c.name}</b><br>Level ${c.level} • ${c.vocation}`;
-      info.style.display = "block";
-
-      msg.className = "message success";
-      msg.innerHTML = "Personagem validado!";
-      document.getElementById("step2").style.display = "block";
-
-    } catch(e) {
-      msg.className = "message error";
-      msg.innerHTML = "Erro ao validar personagem.";
-    }
-  }
-
-  /* Registrar acesso */
-  async function submitForm() {
-    const req = document.getElementById("requestedAccess").value.trim();
-    const msg2 = document.getElementById("message2");
-
-    if (!charData) {
-      msg2.className = "message error";
-      msg2.innerHTML = "Valide o personagem antes.";
-      return;
-    }
-
-    if (!req) {
-      msg2.className = "message error";
-      msg2.innerHTML = "Digite a quest/boss.";
-      return;
-    }
-
-    msg2.className = "message info";
-    msg2.innerHTML = "Salvando...";
-
-    const payload = {
-      charName: charData.name,
-      level: charData.level,
-      vocation: charData.vocation,
-      requestedAccess: req
-    };
-
-    try {
-      const res = await fetch(BACKEND_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      const out = await res.json();
-
-      if (out.success) {
-        msg2.className = "message success";
-        msg2.innerHTML = "Acesso registrado!";
-        document.getElementById("requestedAccess").value = "";
-      } else {
-        msg2.className = "message error";
-        msg2.innerHTML = "Erro ao salvar.";
-      }
-
-    } catch(e) {
-      msg2.className = "message error";
-      msg2.innerHTML = "Erro de comunicação.";
-    }
-  }
-
-  /* Autocomplete */
-  const questInput = document.getElementById("requestedAccess");
-  const suggestionsBox = document.getElementById("suggestions");
-
-  questInput.addEventListener("input", () => {
-    const term = questInput.value.trim().toLowerCase();
-    if (!term) {
-      suggestionsBox.style.display = "none";
-      return;
-    }
-
-    const combined = [...new Set([...localQuestList, ...allSuggestions])];
-
-    const filtered = combined
-      .filter(q => q.toLowerCase().includes(term))
-      .slice(0, 12);
-
-    if (!filtered.length) {
-      suggestionsBox.style.display = "none";
-      return;
-    }
-
-    suggestionsBox.innerHTML = "";
-    filtered.forEach(q => {
-      const div = document.createElement("div");
-      div.className = "suggestion-item";
-      div.textContent = q;
-      div.onclick = () => {
-        questInput.value = q;
-        suggestionsBox.style.display = "none";
-      };
-      suggestionsBox.appendChild(div);
+    .then(data => {
+        const list = document.getElementById("questsList");
+        data.sort().forEach(q => {
+            const o = document.createElement("option");
+            o.value = q;
+            list.appendChild(o);
+        });
     });
 
-    suggestionsBox.style.display = "block";
-  });
+/* === VALIDAR PERSONAGEM === */
+function validateCharacter() {
+    const name = document.getElementById("charName").value.trim();
+    if (!name) return alert("Digite o nome do personagem.");
 
-  document.addEventListener("click", e => {
-    if (e.target !== questInput) {
-      suggestionsBox.style.display = "none";
-    }
-  });
+    fetch(`https://api.tibiadata.com/v4/character/${name}`)
+        .then(r => r.json())
+        .then(d => {
+            const box = document.getElementById("charResult");
+
+            if (!d.character || d.character.error) {
+                box.style.display = "block";
+                box.innerHTML = "❌ Personagem não encontrado.";
+                return;
+            }
+
+            const data = d.character;
+            box.style.display = "block";
+            box.innerHTML = `
+                <b>Nome:</b> ${data.name}<br>
+                <b>Nível:</b> ${data.level}<br>
+                <b>Vocação:</b> ${data.vocation}
+            `;
+
+            document.getElementById("questForm").style.display = "block";
+        });
+}
+
+/* === ENVIAR REQUEST === */
+function sendRequest() {
+    const name = document.getElementById("charName").value.trim();
+    const quest = document.getElementById("questName").value.trim();
+
+    if (!quest) return alert("Digite a quest/boss.");
+
+    fetch("https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec", {
+        method: "POST",
+        body: JSON.stringify({ name, quest })
+    });
+
+    alert("Pedido enviado!");
+}
 </script>
 
 </body>
