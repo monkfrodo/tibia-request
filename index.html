@@ -234,15 +234,21 @@ async function validateCharacter() {
     box.innerHTML = "Validando...";
 
     try {
-        const res = await fetch(`https://api.tibiadata.com/v2/characters/${encodeURIComponent(name)}.json`);
+        // 🔥 NOVA API v3
+        const res = await fetch(`https://api.tibiadata.com/v3/character/${encodeURIComponent(name)}`);
+
+        if (!res.ok) {
+            box.innerHTML = "<span class='error'>Erro ao consultar personagem.</span>";
+            return;
+        }
+
         const data = await res.json();
 
-        const c = data.characters?.data;
+        // 🔥 Estrutura nova da API
+        const c = data.character;
 
         if (!c || !c.name) {
             box.innerHTML = "<span class='error'>❌ Personagem não encontrado.</span>";
-            document.getElementById("questName").style.display = "none";
-            document.getElementById("sendButton").style.display = "none";
             return;
         }
 
@@ -261,6 +267,7 @@ async function validateCharacter() {
 
     } catch (err) {
         box.innerHTML = "<span class='error'>Erro ao validar personagem.</span>";
+        console.error(err);
     }
 }
 
