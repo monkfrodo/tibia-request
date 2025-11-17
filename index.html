@@ -6,178 +6,163 @@
 <title>Tibia Access Manager</title>
 
 <style>
-    /* ===== BACKGROUND ===== */
     body {
         margin: 0;
         padding: 0;
-        background: url("https://www.tibiabr.com/wp-content/uploads/2020/01/paulo-silvente-roshamuul-ld-alternative.jpg")
+        background: url("https://www.tibiabr.com/wp-content/uploads/2020/01/paulo-silvente-roshamuul-ld-alternative.jpg") 
             no-repeat center center fixed;
         background-size: cover;
         font-family: "Verdana", sans-serif;
         color: #fff;
     }
 
-    /* ===== FIRST OVERLAY (escurece imagem) ===== */
-    .overlay-dark {
-        background: rgba(0, 0, 0, 0.60);
-        backdrop-filter: blur(3px);
-        width: 100%;
-        min-height: 100vh;
-        position: relative;
+    /* Overlay elegante que NÃO empurra nada */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(4px);
         z-index: 1;
     }
 
-    /* ===== SECOND OVERLAY (gradiente dourado muito suave) ===== */
-    .overlay-gold {
-        background: linear-gradient(
-            to bottom,
-            rgba(171, 140, 53, 0.12) 0%,
-            rgba(0, 0, 0, 0.2) 40%,
-            rgba(171, 140, 53, 0.15) 100%
-        );
+    /* Wrapper que centraliza tudo */
+    .center-wrapper {
+        position: relative;
+        z-index: 2;
         width: 100%;
         min-height: 100vh;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
     }
 
-    /* ===== CONTAINER CENTRAL ===== */
-    .container {
-        position: relative;
-        z-index: 3;
-        max-width: 540px;
-        margin: 0 auto;
-        margin-top: 60px;
-        padding: 32px;
-        border-radius: 12px;
-
+    /* Caixa central minimalista */
+    .card {
         background: rgba(0, 0, 0, 0.70);
-        border: 2px solid #c9a74a;
-        box-shadow: 0 0 25px rgba(0, 0, 0, 0.7),
-                    0 0 12px rgba(255, 220, 80, 0.25);
+        padding: 35px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 480px;
+        text-align: center;
+        box-shadow: 0 0 18px rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(255, 215, 0, 0.35);
     }
 
-    /* ===== TITULOS ===== */
+    /* Ícone limpo */
+    .icon {
+        width: 60px;
+        height: 60px;
+        image-rendering: pixelated;
+        margin-bottom: 15px;
+    }
+
     h1 {
-        font-size: 30px;
-        margin-bottom: 5px;
+        font-size: 26px;
+        margin-bottom: 10px;
         font-weight: bold;
-        text-shadow: 2px 2px 3px #000;
+        text-shadow: 1px 1px 2px #000;
         color: #f5d98b;
     }
 
     .subtitle {
-        font-size: 14px;
-        margin-bottom: 26px;
-        opacity: 0.9;
+        font-size: 13px;
+        margin-bottom: 25px;
+        opacity: 0.85;
     }
 
-    /* ===== ICONE ===== */
-    .icon {
-        width: 72px;
-        height: 72px;
-        border-radius: 8px;
-        margin-bottom: 16px;
-        image-rendering: pixelated;
-        border: 2px solid #c9a74a;
-        background: rgba(0,0,0,0.4);
-        padding: 4px;
-    }
-
-    /* ===== INPUTS ===== */
     input {
         width: 100%;
         padding: 12px;
-        margin-bottom: 16px;
-        background: #181818;
-        color: #fff;
-        border: 1px solid #8f6d2c;
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.25);
         border-radius: 6px;
+        margin-bottom: 18px;
+        color: #fff;
         font-size: 15px;
-        box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
     }
 
     input:focus {
         outline: none;
-        border-color: #d9b04c;
-        box-shadow: 0 0 6px rgba(217,176,76,0.6);
+        border-color: #d8b45a;
+        background: rgba(255,255,255,0.12);
     }
 
-    /* ===== BOTAO ===== */
     button {
         width: 100%;
-        padding: 15px;
-        background: linear-gradient(#c9a74a, #8f6d2c);
-        color: #000;
+        padding: 14px;
+        font-size: 15px;
         font-weight: bold;
+        background: #d1ac4a;
+        color: #000;
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        font-size: 16px;
-        text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
     }
 
     button:hover {
-        background: linear-gradient(#e6c86a, #9c7a34);
+        background: #e6c86a;
     }
 
-    /* ===== RESULTADOS ===== */
     .result-box {
-        margin-top: 20px;
-        padding: 14px;
+        margin-top: 15px;
+        padding: 12px;
+        background: rgba(0,0,0,0.60);
         border-radius: 6px;
-        background: rgba(0, 0, 0, 0.55);
-        border: 1px solid #c9a74a;
+        border: 1px solid rgba(255, 215, 0, 0.3);
         display: none;
         text-align: left;
         line-height: 1.6;
+        font-size: 14px;
     }
 </style>
 </head>
 
 <body>
 
-<div class="overlay-dark"></div>
-<div class="overlay-gold"></div>
+<div class="overlay"></div>
 
-<div class="container">
+<div class="center-wrapper">
+    <div class="card">
 
-    <img class="icon" src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif" />
+        <img src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif" class="icon">
 
-    <h1>Tibia Access Manager</h1>
-    <div class="subtitle">Valide seu personagem e registre acessos de quests e bosses.</div>
+        <h1>Tibia Access Manager</h1>
+        <div class="subtitle">Valide seu personagem e registre acessos de quests e bosses.</div>
 
-    <input id="charName" placeholder="Digite o nome do seu personagem" />
-    <button onclick="validateCharacter()">Validar Personagem</button>
+        <input id="charName" placeholder="Digite o nome do seu personagem" />
 
-    <div id="charResult" class="result-box"></div>
+        <button onclick="validateCharacter()">Validar Personagem</button>
 
-    <div id="questForm" style="display:none; margin-top: 20px;">
-        <input id="questName" list="questsList" placeholder="Digite a quest/boss desejado" />
-        <datalist id="questsList"></datalist>
+        <div id="charResult" class="result-box"></div>
 
-        <button onclick="sendRequest()">Enviar Pedido</button>
+        <div id="questForm" style="display:none; margin-top:20px;">
+            <input id="questName" list="questsList" placeholder="Digite a quest/boss (autocomplete)" />
+            <datalist id="questsList"></datalist>
+
+            <button style="margin-top:10px;" onclick="sendRequest()">Enviar Pedido</button>
+        </div>
+
     </div>
-
 </div>
 
-
 <script>
-/* === CARREGAR QUESTS === */
+/* Carregar quests */
 fetch("quests.json")
     .then(r => r.json())
     .then(data => {
         const list = document.getElementById("questsList");
         data.sort().forEach(q => {
-            const o = document.createElement("option");
+            let o = document.createElement("option");
             o.value = q;
             list.appendChild(o);
         });
     });
 
-/* === VALIDAR PERSONAGEM === */
+/* Validar personagem */
 function validateCharacter() {
     const name = document.getElementById("charName").value.trim();
     if (!name) return alert("Digite o nome do personagem.");
@@ -194,6 +179,7 @@ function validateCharacter() {
             }
 
             const data = d.character;
+
             box.style.display = "block";
             box.innerHTML = `
                 <b>Nome:</b> ${data.name}<br>
@@ -205,7 +191,7 @@ function validateCharacter() {
         });
 }
 
-/* === ENVIAR REQUEST === */
+/* Enviar request */
 function sendRequest() {
     const name = document.getElementById("charName").value.trim();
     const quest = document.getElementById("questName").value.trim();
