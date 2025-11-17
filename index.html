@@ -5,157 +5,224 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tibia Access Manager</title>
 
+<!-- Fonte -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Verdana, sans-serif;
-        background: url("https://www.tibiabr.com/wp-content/uploads/2020/01/paulo-silvente-roshamuul-ld-alternative.jpg")
-            no-repeat center center fixed;
-        background-size: cover;
-    }
+/* ----- RESET ----- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    .overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.55);
-        backdrop-filter: blur(4px);
-        z-index: 1;
-    }
+/* ----- BACKGROUND ----- */
+body {
+    font-family: 'Inter', sans-serif;
+    background-image: url('https://www.tibiabr.com/wp-content/uploads/2020/01/paulo-silvente-roshamuul-ld-alternative.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
 
-    .wrapper {
-        position: fixed;
-        inset: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 30px;
-        z-index: 2;
-    }
+/* ----- DARK OVERLAY ----- */
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(3px);
+}
 
-    .card {
-        background: rgba(0,0,0,0.78);
-        border: 1px solid rgba(255,215,0,0.4);
-        border-radius: 14px;
-        padding: 36px 28px 30px;
-        width: 100%;
-        max-width: 520px;
-        text-align: center;
-        box-shadow: 0 0 32px rgba(0,0,0,0.8);
-    }
+/* ----- CONTAINER ----- */
+#mainBox {
+    position: relative;
+    width: 540px;
+    padding: 40px 32px;
+    border-radius: 14px;
+    background: rgba(15, 15, 15, 0.75);
+    border: 1px solid rgba(255, 215, 0, 0.35);
+    box-shadow: 0 0 25px rgba(0,0,0,0.55);
+    text-align: center;
+}
 
-    .icon img {
-        width: 54px;
-        height: 54px;
-        margin-bottom: 12px;
-        image-rendering: pixelated;
-    }
+/* ----- ICON ----- */
+#icon img {
+    width: 56px;
+    margin-bottom: 14px;
+}
 
-    h1 {
-        color: #f5d98b;
-        font-size: 26px;
-        margin-bottom: 6px;
-        text-shadow: 1px 1px 2px black;
-    }
+/* ----- TITLE ----- */
+h1 {
+    color: #f8e29c;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
 
-    input {
-        width: 100%;
-        padding: 12px;
-        margin-bottom: 16px;
-        border: 1px solid #555;
-        background: rgba(255,255,255,0.06);
-        color: white;
-        border-radius: 6px;
-        font-size: 14px;
-    }
+p.subtitle {
+    color: #ddd;
+    font-size: 15px;
+    margin-bottom: 28px;
+}
 
-    input::placeholder {
-        color: #aaa;
-    }
+/* ----- INPUTS ----- */
+input, button {
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 16px;
+}
 
-    .subtitle {
-        color: #ddd;
-        font-size: 13px;
-        margin-bottom: 22px;
-    }
+input {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.15);
+}
 
-    button {
-        width: 100%;
-        padding: 14px;
-        border-radius: 6px;
-        border: none;
-        background: #d6b25a;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 15px;
-        transition: 0.2s;
-    }
+input::placeholder {
+    color: #ddd;
+}
 
-    .result-box {
-        display: none;
-        background: rgba(0,0,0,0.55);
-        border: 1px solid rgba(255,215,0,0.35);
-        padding: 12px;
-        color: #fff;
-        border-radius: 8px;
-        margin-top: 12px;
-        text-align: left;
-        font-size: 14px;
-    }
+/* ----- BUTTON ----- */
+button {
+    background: #d7b259;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-    .error {
-        color: #ff6b6b;
-        font-weight: bold;
-    }
+button:hover {
+    background: #c49d42;
+}
 
+/* ----- RESULT BOX ----- */
+#charResult {
+    display: none;
+    margin-top: 12px;
+    margin-bottom: 10px;
+    padding: 14px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: #fff;
+    text-align: left;
+    font-size: 15px;
+}
+
+.error {
+    color: #ff6b6b;
+    font-weight: 600;
+}
+
+/* ----- QUEST BOX ----- */
+#questName {
+    display: none;
+}
+
+#sendButton {
+    display: none;
+}
 </style>
 </head>
+
 <body>
 
-<div class="overlay"></div>
-
-<div class="wrapper">
-    <div class="card">
-
-        <div class="icon">
-            <img src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif">
-        </div>
-
-        <h1>Tibia Access Manager</h1>
-        <div class="subtitle">Valide seu personagem e registre pedidos de acesso.</div>
-
-        <input id="charName" placeholder="Digite o nome do personagem">
-
-        <button onclick="validateCharacter()">Validar personagem</button>
-
-        <div id="charResult" class="result-box"></div>
-
-        <input id="questName" list="questsList" placeholder="Quest / Boss" style="display:none;">
-        <datalist id="questsList"></datalist>
-
-        <button id="sendButton" onclick="sendRequest()" style="display:none;">Enviar pedido</button>
-
+<div id="mainBox">
+    
+    <!-- Ícone Tibia -->
+    <div id="icon">
+        <img src="https://www.tibiawiki.com.br/images/0/0f/Ferumbras.gif">
     </div>
+
+    <h1>Tibia Access Manager</h1>
+    <p class="subtitle">Valide seu personagem e registre pedidos de acesso a quests e bosses.</p>
+
+    <!-- Campo do personagem -->
+    <input type="text" id="charName" placeholder="Digite o nome do personagem">
+
+    <button onclick="validateCharacter()">Validar personagem</button>
+
+    <!-- Resultado -->
+    <div id="charResult"></div>
+
+    <!-- Campo de quest -->
+    <input type="text" id="questName" placeholder="Digite a quest/boss (autocomplete)">
+
+    <!-- Enviar -->
+    <button id="sendButton" onclick="sendRequest()">Enviar Pedido</button>
+
 </div>
 
 <script>
-let currentLevel = null;
-let currentVoc = null;
+// 🔥 Lista completa de quests carregada externamente (JSON local ou remoto)
+const questsURL = "quests.json";
+let allQuests = [];
 
-// Load quests.json
-fetch("quests.json")
+/* ------------------------------------------------------------
+   🔄 CARREGA A LISTA DE QUESTS (autocomplete)
+------------------------------------------------------------ */
+fetch(questsURL)
     .then(r => r.json())
-    .then(list => {
-        list.forEach(q => {
-            const opt = document.createElement("option");
-            opt.value = q;
-            document.getElementById("questsList").appendChild(opt);
+    .then(data => {
+        allQuests = data;
+        setupAutocomplete();
+    })
+    .catch(err => console.error("Erro ao carregar quests:", err));
+
+function setupAutocomplete() {
+    const input = document.getElementById("questName");
+
+    input.addEventListener("input", () => {
+        const val = input.value.toLowerCase();
+        const suggestions = allQuests.filter(q => q.toLowerCase().includes(val)).slice(0, 8);
+
+        closeAutocomplete();
+
+        if (!val) return;
+
+        const list = document.createElement("div");
+        list.setAttribute("id", "autocomplete-list");
+        list.style.background = "rgba(0,0,0,0.75)";
+        list.style.color = "white";
+        list.style.padding = "6px";
+        list.style.borderRadius = "6px";
+        list.style.marginTop = "-10px";
+
+        input.parentNode.appendChild(list);
+
+        suggestions.forEach(q => {
+            const item = document.createElement("div");
+            item.style.padding = "6px";
+            item.style.cursor = "pointer";
+            item.innerText = q;
+
+            item.onclick = () => {
+                input.value = q;
+                closeAutocomplete();
+            };
+
+            list.appendChild(item);
         });
     });
+}
 
+function closeAutocomplete() {
+    const list = document.getElementById("autocomplete-list");
+    if (list) list.remove();
+}
+
+/* ------------------------------------------------------------
+   ✔ FUNÇÃO QUE VALIDA O PERSONAGEM (API TibiaData v2)
+------------------------------------------------------------ */
 async function validateCharacter() {
     const name = document.getElementById("charName").value.trim();
-    const box  = document.getElementById("charResult");
+    const box = document.getElementById("charResult");
 
     if (!name) {
         box.style.display = "block";
@@ -166,59 +233,63 @@ async function validateCharacter() {
     box.style.display = "block";
     box.innerHTML = "Validando...";
 
-    const url = "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec?char=" + encodeURIComponent(name);
-
     try {
-        const res = await fetch(url);
+        const res = await fetch(`https://api.tibiadata.com/v2/characters/${encodeURIComponent(name)}.json`);
         const data = await res.json();
 
-        if (!data.found) {
+        const c = data.characters?.data;
+
+        if (!c || !c.name) {
             box.innerHTML = "<span class='error'>❌ Personagem não encontrado.</span>";
             document.getElementById("questName").style.display = "none";
             document.getElementById("sendButton").style.display = "none";
             return;
         }
 
-        currentLevel = data.level;
-        currentVoc   = data.vocation;
+        window.currentChar = c.name;
+        window.currentLevel = c.level;
+        window.currentVoc = c.vocation;
 
         box.innerHTML = `
-            <strong>Nome:</strong> ${data.name}<br>
-            <strong>Nível:</strong> ${data.level}<br>
-            <strong>Vocação:</strong> ${data.vocation}
+            <strong>Nome:</strong> ${c.name}<br>
+            <strong>Nível:</strong> ${c.level}<br>
+            <strong>Vocação:</strong> ${c.vocation}
         `;
 
         document.getElementById("questName").style.display = "block";
         document.getElementById("sendButton").style.display = "block";
 
-    } catch(e) {
-        box.innerHTML = "<span class='error'>❌ Erro ao validar personagem.</span>";
+    } catch (err) {
+        box.innerHTML = "<span class='error'>Erro ao validar personagem.</span>";
     }
 }
 
+/* ------------------------------------------------------------
+   ✔ ENVIA PARA O GOOGLE SHEETS
+------------------------------------------------------------ */
 async function sendRequest() {
-    const char  = document.getElementById("charName").value.trim();
     const quest = document.getElementById("questName").value.trim();
 
-    if (!char || !quest) return alert("Preencha tudo.");
+    if (!quest) {
+        alert("Digite uma quest ou boss.");
+        return;
+    }
 
     const payload = {
-        charName: char,
-        level: currentLevel,
-        vocation: currentVoc,
+        charName: window.currentChar,
+        level: window.currentLevel,
+        vocation: window.currentVoc,
         requestedAccess: quest,
         notes: ""
     };
 
-    await fetch(
-        "https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec",
-        {
-            method: "POST",
-            body: JSON.stringify(payload)
-        }
-    );
+    await fetch("https://script.google.com/macros/s/AKfycbxXNT-qfqMwpDpI5YidY8ZS1_DFS3Ey2bP39qj4KM-DL2wljYaa6dptBrSs-D5dZhNk/exec", {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(payload)
+    });
 
-    alert("Pedido registrado!");
+    alert("Pedido enviado com sucesso!");
 }
 </script>
 
